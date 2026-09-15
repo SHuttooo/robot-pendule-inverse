@@ -1,4 +1,4 @@
-# Robot balancier
+# Robot pendule inversé
 
 [English](README.md) · **Français**
 
@@ -57,10 +57,11 @@ donnees/      les journaux série bruts du robot, source de chaque chiffre mesur
 
 | | |
 |---|---|
-| [`hardware/README.md`](hardware/README.md) | pièces, montage, **ce qui diffère de la CAO** (IMU déplacée) |
+| [`hardware/README.fr.md`](hardware/README.fr.md) | pièces, montage, **ce qui diffère de la CAO** (IMU déplacée) |
 | [`hardware/cablage.md`](hardware/cablage.md) | brochage ESP32, A4988, MPU-6050, alimentation |
-| [`firmware/README.md`](firmware/README.md) | architecture temps réel, commandes, télémétrie, téléversement |
-| [`simulation/README.md`](simulation/README.md) | le modèle, l'entraînement, l'export vers l'ESP32 |
+| [`firmware/README.fr.md`](firmware/README.fr.md) | architecture temps réel, commandes, télémétrie, téléversement |
+| [`simulation/README.fr.md`](simulation/README.fr.md) | le modèle, l'entraînement, l'export vers l'ESP32 |
+| [`simulation/modeles/balancier.xml`](simulation/modeles/balancier.xml) | **le modèle du robot**, en MJCF (le format XML de MuJoCo) |
 | [`docs/journal/PIEGES.md`](docs/journal/PIEGES.md) | les bugs rencontrés, leur coût, la règle qui en sort |
 | [`docs/journal/RESULTATS.md`](docs/journal/RESULTATS.md) | tous les chiffres, avec la commande qui les produit |
 

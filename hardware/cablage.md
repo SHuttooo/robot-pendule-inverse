@@ -1,5 +1,7 @@
 # Câblage
 
+[English](wiring.md) · **Français**
+
 ```mermaid
 flowchart LR
     BAT["Pack 4S 18650<br/>14,8 V"]
@@ -70,11 +72,11 @@ Brochage lu dans `firmware/robot_balancier/robot_balancier.ino`.
 | 2A, 2B | fils rouge et bleu | bobine 2 |
 
 **Le micropas.** 1 600 pas par tour ont été **mesurés** sur le robot le
-9 septembre 2026, soit du 1/8 de pas. Sur l'A4988,
-le 1/8 correspond à MS1 et MS2 au niveau haut et MS3 au niveau bas : toutes les
-broches MS ne sont donc pas câblées. Le carnet d'origine notait les trois au
-3,3 V, ce qui aurait donné du 1/16 et 3 200 pas par tour. La mesure l'a
-contredit, et le montage confirme le 1/8.
+9 septembre 2026, soit du 1/8 de pas. Sur l'A4988, le 1/8 correspond à MS1 et
+MS2 au niveau haut et MS3 au niveau bas : toutes les broches MS ne sont donc
+pas câblées. Le carnet d'origine notait les trois au 3,3 V, ce qui aurait donné
+du 1/16 et 3 200 pas par tour. La mesure l'a contredit, et le montage confirme
+le 1/8.
 
 Une bobine du moteur droit est inversée au câblage, d'où `INVERT_M1` et
 `INVERT_M2` laissés à `false` dans le code.

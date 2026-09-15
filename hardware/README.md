@@ -1,133 +1,133 @@
-# Mécanique et matériel
+# Mechanics and hardware
+
+**English** · [Français](README.fr.md)
 
 <table>
 <tr>
-<td><img src="../docs/media/robot_cote.jpg" width="260" alt="Le robot de côté"></td>
-<td><img src="../docs/media/robot_face.jpg" width="260" alt="Le robot de face"></td>
-<td><img src="../docs/media/robot_trois_quarts.jpg" width="260" alt="Le robot de trois quarts"></td>
+<td><img src="../docs/media/robot_cote.jpg" width="260" alt="The robot from the side"></td>
+<td><img src="../docs/media/robot_face.jpg" width="260" alt="The robot from the front"></td>
+<td><img src="../docs/media/robot_trois_quarts.jpg" width="260" alt="The robot, three-quarter view"></td>
 </tr>
 </table>
 
-*Images extraites de la vidéo du 10 septembre 2026.*
+*Frames taken from the video of 10 September 2026.*
 
-Un pendule inversé sur deux roues. La pièce bleue du bas tient les deux
-moteurs ; les trois étages rouges au-dessus portent la platine d'essai,
-l'ESP32 et, tout en haut, le support des quatre batteries.
+An inverted pendulum on two wheels. The blue bottom part holds both motors; the
+three red levels above carry the breadboard, the ESP32 and, at the very top,
+the holder for the four batteries.
 
-Le câblage est dans [`cablage.md`](cablage.md).
+Wiring is described in [`wiring.md`](wiring.md).
 
 ---
 
-## Nomenclature
+## Bill of materials
 
-| composant | référence | qté | remarque |
+| component | part | qty | note |
 |---|---|---|---|
-| microcontrôleur | ESP32 WROOM-32D, carte de développement | 1 | |
-| centrale inertielle | MPU-6050 | 1 | I2C, adresse 0x68 |
-| drivers moteur | A4988 | 2 | micropas 1/8, soit 1 600 pas/tour (mesuré) |
-| moteurs | NEMA 17 17HS3401S | 2 | |
-| batteries | 18650 Li-ion 3,7 V LiitoKala | 4 | en série : 4S, 14,8 V nominal |
-| convertisseur | abaisseur vers 5 V | 1 | alimente l'ESP32 par sa broche VIN |
-| condensateur | 100 µF | 1 | sur VMOT |
-| platine d'essai | breadboard | 1 | |
-| roues | Ø 65 mm, 26 mm de large | 2 | |
-| pièces imprimées | `piece1` à `piece4` | 4 | voir ci-dessous |
-| inserts filetés | M2.5 | 2 | prévus pour l'emplacement d'origine de l'IMU, finalement pas utilisés |
-| scotch double face | | | fixe l'ESP32, la platine, les batteries et l'IMU |
+| microcontroller | ESP32 WROOM-32D, development board | 1 | |
+| IMU | MPU-6050 | 1 | I2C, address 0x68 |
+| motor drivers | A4988 | 2 | 1/8 microstepping, i.e. 1,600 steps/rev (measured) |
+| motors | NEMA 17 17HS3401S | 2 | |
+| batteries | 18650 Li-ion 3.7 V LiitoKala | 4 | in series: 4S, 14.8 V nominal |
+| converter | step-down to 5 V | 1 | powers the ESP32 through its VIN pin |
+| capacitor | 100 µF | 1 | on VMOT |
+| breadboard | | 1 | |
+| wheels | Ø 65 mm, 26 mm wide | 2 | |
+| printed parts | `piece1` to `piece4` | 4 | see below |
+| threaded inserts | M2.5 | 2 | planned for the original IMU location, never used in the end |
+| double-sided tape | | | holds the ESP32, breadboard, batteries and IMU |
 
 ---
 
-## Les pièces
+## The parts
 
-| pièce | encombrement | volume imprimé |
+| part | bounding box | printed volume |
 |---|---|---|
-| `piece1` | 113 × 42 × 47 mm | 92,8 cm³ |
-| `piece2` | 143 × 75 × 45 mm | 65,2 cm³ |
-| `piece3` | 143,6 × 75,6 × 80 mm | 118,1 cm³ |
-| `piece4` | 143,7 × 75,7 × 63 mm | 103,5 cm³ |
+| `piece1` | 113 × 42 × 47 mm | 92.8 cm³ |
+| `piece2` | 143 × 75 × 45 mm | 65.2 cm³ |
+| `piece3` | 143.6 × 75.6 × 80 mm | 118.1 cm³ |
+| `piece4` | 143.7 × 75.7 × 63 mm | 103.5 cm³ |
 
-Robot assemblé : 143,7 × 75,7 × 220 mm, 231,5 mm de haut roues comprises.
-Étagères à +66, +141 et +199 mm au-dessus de l'axe des roues. Toutes ces cotes
-sont lues dans l'assemblage par `simulation/modele.py`, pas mesurées au pied à
-coulisse.
+Assembled robot: 143.7 × 75.7 × 220 mm, 231.5 mm tall including wheels. Shelves
+at +66, +141 and +199 mm above the wheel axle. All these dimensions are read
+from the assembly by `simulation/modele.py`, not measured with calipers.
 
-### Les fichiers
+### Files
 
-| dossier | contenu |
+| folder | content |
 |---|---|
-| `cao/solidworks/` | `Assemblage1.SLDASM` et les 5 pièces. **Version du 25 août 2026, la dernière.** |
-| `cao/stl/` | les 4 pièces à imprimer. `piece2` à `piece4` sont les exports du 25 août (les anciens `v2`). |
-| `cao/stl_assemblage/` | les 6 STL exportés dans le repère de l'assemblage, lus par la simulation |
+| `cao/solidworks/` | `Assemblage1.SLDASM` and its 5 parts. **Version of 25 August 2026, the latest.** |
+| `cao/stl/` | the 4 parts to print. `piece2` to `piece4` are the 25 August exports (formerly `v2`). |
+| `cao/stl_assemblage/` | the 6 STL files exported in the assembly frame, loaded by the simulation |
 
-### La retouche du 25 août
+### The 25 August revision
 
-Comparaison des maillages avant et après : l'enveloppe extérieure des pièces
-ne bouge pas. Un seul contour change, sur 5 mm de haut, en haut de chaque pièce.
+Comparing the meshes before and after: the outer shape of the parts does not
+change. A single contour changes, 5 mm high, at the top of each part.
 
-| pièce | avant | après | par côté |
+| part | before | after | per side |
 |---|---|---|---|
-| `piece2` (tenon) | 107,90 × 36,90 mm | 107,70 × 36,70 mm | −0,10 mm |
-| `piece3` | 130,74 × 66,90 mm | 130,46 × 66,70 mm | −0,14 / −0,10 mm |
-| `piece4` | 130,73 × 62,73 mm | 130,45 × 62,45 mm | −0,14 mm |
+| `piece2` (tenon) | 107.90 × 36.90 mm | 107.70 × 36.70 mm | −0.10 mm |
+| `piece3` | 130.74 × 66.90 mm | 130.46 × 66.70 mm | −0.14 / −0.10 mm |
+| `piece4` | 130.73 × 62.73 mm | 130.45 × 62.45 mm | −0.14 mm |
 
-C'est du jeu ajouté pour l'emboîtement des étages.
+This is clearance added so the levels fit into each other.
 
-Les STL de `cao/stl_assemblage/` ont été exportés **avant** cette retouche
-(vérifié par la géométrie : 0,01 mm d'écart avec l'ancienne `piece2`, 0,11 mm
-avec la nouvelle). Sur la masse et l'inertie du modèle, 0,1 mm de paroi ne se
-voit pas. Pour les aligner malgré tout : réexporter l'assemblage en STL, une
-pièce par fichier, dans le repère de l'assemblage.
+The STL files in `cao/stl_assemblage/` were exported **before** this revision
+(checked on the geometry: 0.01 mm from the old `piece2`, 0.11 mm from the new
+one). A 0.1 mm wall change has no visible effect on the model's mass and
+inertia. To align them anyway: re-export the assembly as STL, one file per part,
+in the assembly frame.
 
 ---
 
-## Le montage réel diffère de la CAO
+## The actual robot differs from the CAD
 
-### L'IMU a été déplacée loin des moteurs
+### The IMU was moved away from the motors
 
-L'assemblage SolidWorks montre l'emplacement **prévu** de l'IMU, pas celui du
-robot :
+The SolidWorks assembly shows the **planned** IMU location, not the one on the
+robot:
 
-| | pièce | endroit | fixation |
+| | part | location | mounting |
 |---|---|---|---|
-| **prévu dans la CAO** | `piece1`, la pièce du bas | celle qui tient les deux moteurs | 2 inserts filetés M2.5 |
-| **sur le robot** | `piece2`, la deuxième en partant du bas | sur le côté du pied central qui la porte | scotch double face |
+| **planned in the CAD** | `piece1`, the bottom part | the one holding both motors | 2 M2.5 threaded inserts |
+| **on the robot** | `piece2`, second from the bottom | on the side of the central leg that supports it | double-sided tape |
 
-Pourquoi : un moteur pas-à-pas avance par à-coups, 1 600 fois par tour. Collée
-près de lui, l'IMU mesure ces vibrations en plus du mouvement du robot, et le
-gyroscope les prend pour des rotations. Le terme dérivé du régulateur les
-amplifie ensuite. Au début de la mise au point, le carnet relevait 3,48 °/s de
-bruit sur le gyroscope.
+Why: a stepper motor moves in small jerks, 1,600 per revolution. Mounted close
+to it, the IMU picks up these vibrations on top of the robot's motion, and the
+gyroscope reads them as rotations. The controller's derivative term then
+amplifies them. At the start of tuning, the notebook recorded 3.48 °/s of
+gyroscope noise.
 
-Les deux **inserts M2.5** prévus pour la fixer sur la pièce des moteurs n'ont
-donc finalement pas servi. Si on réimprime `piece1`, leurs logements peuvent
-être ignorés.
+The two **M2.5 inserts** planned to hold it on the motor part were therefore
+never used. If `piece1` is printed again, their holes can be ignored.
 
-**Orientation, à respecter si on la déplace encore.** Le firmware ne lit que
-`AY`, `AZ` et `GX` : l'axe X du capteur doit rester parallèle à l'axe des roues.
-Le capteur est monté couché, d'où une verticale lue vers −91,4° et non 0°. La
-commande `Z` recale ce zéro, robot tenu droit.
+**Orientation, to keep if it is moved again.** The firmware only reads `AY`,
+`AZ` and `GX`: the sensor's X axis must stay parallel to the wheel axle. The
+sensor is mounted on its side, so upright reads around −91.4° instead of 0°.
+The `Z` command resets that zero while the robot is held upright.
 
-### Fixations au scotch double face
+### Mounting with double-sided tape
 
-L'**ESP32**, la **platine d'essai**, les **batteries** et l'**IMU** sont collés
-au scotch double face, sans vis.
+The **ESP32**, the **breadboard**, the **batteries** and the **IMU** are stuck
+on with double-sided tape, no screws.
 
-Deux conséquences :
+Two consequences:
 
-- une pièce collée peut glisser après une chute. Si l'IMU a bougé, le point
-  d'équilibre bouge avec elle : refaire le calage (`Z`) puis laisser la cascade
-  tourner une minute pour que l'auto-trim retrouve la verticale ;
-- pour l'IMU, un double face **épais, en mousse**, filtre en plus une partie des
-  vibrations des moteurs.
+- a taped part can slip after a fall. If the IMU moved, the balance point moves
+  with it: redo the zero (`Z`), then let the dual PID run for a minute so the
+  auto-trim finds upright again;
+- for the IMU, **thick foam** double-sided tape also filters part of the motor
+  vibrations.
 
 ---
 
-## Points de vigilance
+## Things to watch
 
 | | |
 |---|---|
-| **Vref des A4988** | jamais réglé. Il fixe le couple disponible. Procédure : `Vref = I × 8 × Rshunt`, voir le [carnet](../docs/carnet-du-balancier.html). |
-| **ENABLE** | non câblé : les moteurs restent alimentés et chauffent même à l'arrêt. |
-| **Tension batterie** | aucune mesure. Un élément est mort sans prévenir le 9 septembre 2026. Un pont diviseur vers une entrée analogique réglerait ça. |
-| **USB et 5 V** | ne jamais alimenter l'ESP32 par l'USB et par le convertisseur en même temps. Garder les masses communes, débrancher le fil 5 V. |
-| **Historique** | un premier ESP32 a été détruit par du 12 V sur sa broche 3V3. Les drivers et l'IMU ont été changés, pas le convertisseur. |
+| **A4988 Vref** | never set. It sets the available torque. Procedure: `Vref = I × 8 × Rshunt`, see the [notebook](../docs/carnet-du-balancier.html) (in French). |
+| **ENABLE** | not wired: the motors stay powered and heat up even when idle. |
+| **Battery voltage** | not measured. One cell died without warning on 9 September 2026. A voltage divider to an analog input would fix this. |
+| **USB and 5 V** | never power the ESP32 from USB and from the converter at the same time. Keep the grounds common, disconnect the 5 V wire. |
+| **History** | a first ESP32 was destroyed by 12 V on its 3V3 pin. The drivers and the IMU were replaced, the converter was not. |

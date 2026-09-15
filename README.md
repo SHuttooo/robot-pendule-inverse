@@ -1,4 +1,6 @@
-# Robot balancier
+# Robot pendule inversé
+
+*Inverted pendulum robot. The name stays in French: this project was made in France.*
 
 **English** · [Français](README.fr.md)
 
@@ -59,9 +61,10 @@ donnees/      raw serial logs from the robot, source of every measured number
 | | |
 |---|---|
 | [`hardware/README.md`](hardware/README.md) | parts, assembly, **differences from the CAD** (IMU moved) |
-| [`hardware/cablage.md`](hardware/cablage.md) | ESP32, A4988, MPU-6050 pinout, power supply |
+| [`hardware/wiring.md`](hardware/wiring.md) | ESP32, A4988, MPU-6050 pinout, power supply |
 | [`firmware/README.md`](firmware/README.md) | real-time architecture, commands, telemetry, flashing |
 | [`simulation/README.md`](simulation/README.md) | the model, training, export to the ESP32 |
+| [`simulation/modeles/balancier.xml`](simulation/modeles/balancier.xml) | **the robot model**, in MJCF (MuJoCo's XML format) |
 | [`docs/journal/PIEGES.md`](docs/journal/PIEGES.md) | bugs met along the way, what they cost, the rule learned |
 | [`docs/journal/RESULTATS.md`](docs/journal/RESULTATS.md) | every number, with the command that produces it |
 

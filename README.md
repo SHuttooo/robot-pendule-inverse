@@ -1,137 +1,133 @@
 # Robot balancier
 
-**Un robot à deux roues qui tient debout, d'abord avec un PID réglé à la main,
-puis avec un réseau de neurones entraîné en simulation et exécuté sur l'ESP32.**
+**English** · [Français](README.fr.md)
+
+**A two-wheel robot that balances on its own: first with a hand-tuned dual PID,
+then with a neural network trained in simulation and running on the ESP32.**
 
 <table>
 <tr>
-<td><img src="docs/media/apercu.gif" width="270" alt="Le robot réel poussé au doigt, la simulation en médaillon"></td>
-<td><img src="docs/media/mosaique.gif" width="270" alt="Les 16 jalons de l'entraînement en simulation"></td>
+<td><img src="docs/media/apercu.gif" width="270" alt="The real robot pushed by hand, simulation in the corner"></td>
+<td><img src="docs/media/mosaique.gif" width="270" alt="The 16 training checkpoints in simulation"></td>
 </tr>
 <tr>
-<td align="center">robot réel, même politique qu'en simulation</td>
-<td align="center">16 jalons d'entraînement, 9 M de pas</td>
+<td align="center">real robot, same policy as in simulation</td>
+<td align="center">16 training checkpoints, 9 M steps</td>
 </tr>
 </table>
 
-Vidéo complète (45 s) : voir la [dernière release](../../releases/latest).
+Full video (45 s): see the [latest release](../../releases/latest).
 
-> **In English.** A two-wheel self-balancing robot (ESP32, MPU-6050, two NEMA 17
-> steppers, 3D-printed frame). I first stabilised it with a hand-tuned cascade
-> PID, then rebuilt it in MuJoCo from its SolidWorks assembly and trained a PPO
-> policy (1,634 weights) that now runs on the ESP32. The transfer only worked
-> once the stepper motor was modelled as a magnetic spring and its 71 Hz
-> resonance identified on the real robot, without dismantling anything. The
-> documentation, the code and its comments are in French.
+> The code, its comments and the detailed documentation in the subfolders are
+> in French. This page is the English entry point.
 
 ---
 
-## Deux façons de commander le robot
+## Two ways to control the robot
 
-Le même firmware embarque les deux, et on passe de l'une à l'autre en direct
-(commande série `1` ou `2`, ou bouton du pupitre).
+The same firmware contains both, and you can switch between them live
+(serial command `1` or `2`, or a button on the control panel).
 
-| | **double PID** (`1`) | **agent appris** (`2`) |
+| | **dual PID** (`1`) | **learned policy** (`2`) |
 |---|---|---|
-| origine | réglé à la main, pour mettre en pratique mes cours d'automatique | entraîné par PPO dans MuJoCo |
-| structure | boucle d'angle 200 Hz → accélération des roues, boucle de position 40 Hz qui déplace l'angle cible, auto-trim de la verticale | un réseau 15 → 32 → 32 → 2, 1 634 poids, qui remplace les deux boucles et décide à 100 Hz |
-| en commun | lecture de l'IMU, intégration de la vitesse, génération des pas, sécurités | idem |
+| origin | tuned by hand, to put my control engineering courses into practice | trained with PPO in MuJoCo |
+| structure | 200 Hz angle loop → wheel acceleration, 40 Hz position loop that shifts the target angle, auto-trim of the upright angle | a 15 → 32 → 32 → 2 network, 1,634 weights, replacing both loops and deciding at 100 Hz |
+| shared | IMU reading, speed integration, step generation, safety checks | same |
 
-**En pratique :** armer le double PID une minute d'abord. Son auto-trim trouve
-la vraie verticale, que l'agent reprend ensuite. L'agent n'a pas d'auto-trim.
+**In practice:** arm the dual PID for one minute first. Its auto-trim finds the
+true upright angle, which the policy then reuses. The policy has no auto-trim.
 
-Le double PID sert aussi de **témoin** : en simulation (`simulation/firmware.py`,
-`08_agent.py --duel`) comme sur le robot, c'est lui qui dit si un mauvais
-résultat vient de l'agent ou du matériel. Le 9 septembre, lancé avant l'agent,
-il tenait douze fois moins bien que la veille : la dégradation venait donc du
-robot (très probablement la batterie, un élément était mort), pas du
-réentraînement.
+The dual PID is also the **reference**: in simulation (`simulation/firmware.py`,
+`08_agent.py --duel`) as on the robot, it tells whether a bad result comes from
+the policy or from the hardware. On 9 September, run before the policy, it
+balanced twelve times worse than earlier that evening: the problem was the
+robot (most likely the battery, one cell was dead), not the retraining.
 
 ---
 
-## Ce qu'il y a dedans
+## What's inside
 
 ```
-hardware/     la mécanique : CAO SolidWorks, STL, nomenclature, câblage, montage réel
-firmware/     le code ESP32 : cascade PID, politique apprise, sécurités, commandes série
-tools/        le moniteur série (journal horodaté) et le pupitre de pilotage avec joystick
-simulation/   MuJoCo, l'environnement Gymnasium, PPO, l'export C, les vidéos
-docs/         le carnet de mise au point, le journal (pièges, décisions, résultats)
-donnees/      les journaux série bruts du robot, source de chaque chiffre mesuré
+hardware/     mechanics: SolidWorks CAD, STL, bill of materials, wiring, actual assembly
+firmware/     ESP32 code: dual PID, learned policy, safety checks, serial commands
+tools/        serial monitor (timestamped log) and control panel with joystick
+simulation/   MuJoCo, Gymnasium environment, PPO, C export, videos
+docs/         tuning notebook, project log (pitfalls, decisions, results)
+donnees/      raw serial logs from the robot, source of every measured number
 ```
 
 | | |
 |---|---|
-| [`hardware/README.md`](hardware/README.md) | pièces, montage, **ce qui diffère de la CAO** (IMU déplacée) |
-| [`hardware/cablage.md`](hardware/cablage.md) | brochage ESP32, A4988, MPU-6050, alimentation |
-| [`firmware/README.md`](firmware/README.md) | architecture temps réel, commandes, télémétrie, téléversement |
-| [`simulation/README.md`](simulation/README.md) | le modèle, l'entraînement, l'export vers l'ESP32 |
-| [`docs/journal/PIEGES.md`](docs/journal/PIEGES.md) | les bugs rencontrés, leur coût, la règle qui en sort |
-| [`docs/journal/RESULTATS.md`](docs/journal/RESULTATS.md) | tous les chiffres, avec la commande qui les produit |
+| [`hardware/README.md`](hardware/README.md) | parts, assembly, **differences from the CAD** (IMU moved) |
+| [`hardware/cablage.md`](hardware/cablage.md) | ESP32, A4988, MPU-6050 pinout, power supply |
+| [`firmware/README.md`](firmware/README.md) | real-time architecture, commands, telemetry, flashing |
+| [`simulation/README.md`](simulation/README.md) | the model, training, export to the ESP32 |
+| [`docs/journal/PIEGES.md`](docs/journal/PIEGES.md) | bugs met along the way, what they cost, the rule learned |
+| [`docs/journal/RESULTATS.md`](docs/journal/RESULTATS.md) | every number, with the command that produces it |
 
 ---
 
-## Résultats
+## Results
 
-**La simulation reproduit le robot réel.** Le même agent, jugé dans la
-simulation et sur le matériel :
+**The simulation matches the real robot.** The same policy, evaluated in
+simulation and on the hardware:
 
-| | simulation | robot réel |
+| | simulation | real robot |
 |---|---|---|
-| erreur d'angle, écart-type | 1,743° | 1,572° |
-| commande moteur, écart-type | 873 pas/s | 878 pas/s |
+| tilt error, standard deviation | 1.743° | 1.572° |
+| motor command, standard deviation | 873 steps/s | 878 steps/s |
 
-1 % d'écart sur la commande, environ 10 % sur l'inclinaison. La simulation n'a
-jamais été ajustée sur cette observation : seuls la résonance du moteur et le
-bruit des capteurs y ont été recalés, mesurés séparément.
+1% difference on the command, about 10% on the tilt. The simulation was never
+fitted to this observation: only the motor resonance and the sensor noise were
+calibrated, each measured separately.
 
-**Réentraîné sur ce modèle fidèle**, le nouvel agent, en simulation :
+**Retrained on this faithful model**, the new policy, in simulation:
 
-| | ancien agent | **nouvel agent** | cascade PID |
+| | old policy | **new policy** | dual PID |
 |---|---|---|---|
-| erreur d'angle, écart-type | 1,743° | **0,106°** | 0,185° |
-| commande, écart-type | 873 pas/s | **47 pas/s** | 86 pas/s |
-| dérive de position | 55 mm | 12 mm | 13 mm |
-| survie à difficulté maximale | 25 % | **42 %** | 33 % |
+| tilt error, standard deviation | 1.743° | **0.106°** | 0.185° |
+| command, standard deviation | 873 steps/s | **47 steps/s** | 86 steps/s |
+| position drift | 55 mm | 12 mm | 13 mm |
+| survival at maximum difficulty | 25% | **42%** | 33% |
 
-Sur le robot, le nouvel agent a tenu 76 s avec 536 pas/s d'écart-type de
-commande, contre 893 pour l'ancien. **La comparaison chiffrée avec la cascade
-sur le matériel reste à faire.**
+On the robot, the new policy balanced for 76 s with a command standard
+deviation of 536 steps/s, versus 893 for the old one. **A measured comparison
+against the dual PID on the hardware is still to be done.**
 
-Le double PID réglé à la main avait d'abord fait passer l'erreur d'angle de
-0,293° à 0,064° (voir le [carnet](docs/carnet-du-balancier.html)). Il a servi à
-mettre en pratique mes cours d'automatique, pas à obtenir le meilleur
-régulateur possible.
+The hand-tuned dual PID had first brought the tilt error down from 0.293° to
+0.064° (see the [notebook](docs/carnet-du-balancier.html), in French). Its purpose
+was to put my control engineering courses into practice, not to build the best
+possible controller.
 
-**J'ai volontairement sauté la démarche complète d'automatique** : modéliser le
-pendule, établir sa fonction de transfert, trouver ses pôles et dimensionner un
-correcteur proprement. Les gains ont été trouvés par essais et mesures sur le
-robot, puis je suis passé directement à l'apprentissage par renforcement, qui
-était le vrai sujet du projet.
+**I deliberately skipped the full control engineering approach**: modelling the
+pendulum, deriving its transfer function, finding its poles and designing a
+controller properly. The gains were found by trial and measurement on the
+robot, and I then moved straight on to reinforcement learning, which was the
+real goal of the project.
 
 ---
 
-## Démarrer
+## Getting started
 
-**Simulation** (Python 3.12, depuis `simulation/`) :
+**Simulation** (Python 3.12, from `simulation/`):
 
 ```
 pip install -r requirements.txt
 pip install torch --index-url https://download.pytorch.org/whl/cpu
 
-python modele.py --etat                 chaque paramètre et sa provenance
-python 01_regarder.py                   le robot dans le viewer
+python modele.py --etat                 every parameter and where it comes from
+python 01_regarder.py                   the robot in the viewer
 python 08_agent.py --agent agents/balancier_final.zip
-python 08_agent.py --duel               agent contre cascade
-python 07_ppo.py --actionneur couple --pas 9000000       réentraîner (~16 min)
+python 08_agent.py --duel               policy against dual PID
+python 07_ppo.py --actionneur couple --pas 9000000       retrain (~16 min)
 python 11_export_c.py --agent agents/balancier_final.zip
-python 12_valider_c.py                  le C doit égaler PyTorch
+python 12_valider_c.py                  the C code must match PyTorch
 ```
 
-**Firmware** : ouvrir `firmware/robot_balancier/robot_balancier.ino` dans
-l'IDE Arduino, carte *ESP32 Dev Module*, core esp32 3.3.
+**Firmware**: open `firmware/robot_balancier/robot_balancier.ino` in the
+Arduino IDE, board *ESP32 Dev Module*, esp32 core 3.3.
 
-**Piloter le robot** (Windows) :
+**Driving the robot** (Windows):
 
 ```
 powershell -ExecutionPolicy Bypass -File tools\serial_monitor.ps1
@@ -140,25 +136,25 @@ python tools\pupitre.py
 
 ---
 
-## Le parcours
+## Timeline
 
 | | |
 |---|---|
-| **août 2026** | châssis, électronique, double PID réglé à la main par essais et mesures, sans modélisation complète. Un calcul rapide montre qu'une commande en vitesse ne peut pas stabiliser un pendule inversé : passage à une commande en accélération. Bug dans le pilote I2C d'Espressif remonté par `addr2line`. |
-| **5 sept** | modèle MuJoCo reconstruit depuis l'assemblage SolidWorks, firmware porté en simulation comme témoin, premier agent PPO. |
-| **9 sept** | politique exportée en C et validée contre PyTorch. Plantage de la carte résolu en isolant l'I2C dans une tâche dédiée. Identification du moteur en boucle fermée, par balayages et interspectres, sans démonter le robot : résonance à 71 Hz, pas 113. Réentraînement sur le moteur fidèle. |
-| **10 sept** | direction (deux vitesses de roue indépendantes sur un seul timer), pupitre avec joystick, vidéo. |
+| **August 2026** | frame, electronics, dual PID tuned by hand through trial and measurement, without a full model. A quick calculation shows that commanding wheel speed cannot stabilise an inverted pendulum: switch to commanding acceleration. A bug in Espressif's I2C driver tracked down with `addr2line`. |
+| **5 Sept** | MuJoCo model rebuilt from the SolidWorks assembly, firmware ported to simulation as a reference, first PPO policy. |
+| **9 Sept** | policy exported to C and validated against PyTorch. Board crashes fixed by moving I2C to a dedicated task. Motor identified in closed loop with frequency sweeps and cross-spectra, without taking the robot apart: resonance at 71 Hz, not 113. Retraining on the faithful motor model. |
+| **10 Sept** | steering (two independent wheel speeds from a single timer), joystick control panel, video. |
 
-## Ce qui reste ouvert
+## Still open
 
-- mesurer la cascade et l'agent sur le matériel, dans les mêmes conditions ;
-- régler le Vref des A4988, jamais mesuré ;
-- refaire le pack batterie (un élément mort) et ajouter une mesure de tension ;
-- la période du pendule suspendu, contre-épreuve du modèle ([`docs/MESURES.md`](docs/MESURES.md)).
+- measure the dual PID and the policy on the hardware, under the same conditions;
+- set the A4988 Vref, never measured;
+- rebuild the battery pack (one dead cell) and add voltage monitoring;
+- the period of the robot hanging as a pendulum, an independent check of the model ([`docs/MESURES.md`](docs/MESURES.md)).
 
 ---
 
-**Matthieu Vinet**, élève ingénieur en robotique à Polytech Sorbonne ·
+**Matthieu Vinet**, robotics engineering student at Polytech Sorbonne ·
 [matthieu-vinet.fr](https://matthieu-vinet.fr/)
 
-Code écrit avec Claude Code comme assistant de programmation. Licence [MIT](LICENSE).
+Code written with Claude Code as a programming assistant. [MIT](LICENSE) license.

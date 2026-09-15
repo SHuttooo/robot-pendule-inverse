@@ -33,7 +33,7 @@ Le même firmware embarque les deux, et on passe de l'une à l'autre en direct
 
 | | **double PID** (`1`) | **agent appris** (`2`) |
 |---|---|---|
-| origine | réglé à la main, pour apprendre l'automatique | entraîné par PPO dans MuJoCo |
+| origine | réglé à la main, pour mettre en pratique mes cours d'automatique | entraîné par PPO dans MuJoCo |
 | structure | boucle d'angle 200 Hz → accélération des roues, boucle de position 40 Hz qui déplace l'angle cible, auto-trim de la verticale | un réseau 15 → 32 → 32 → 2, 1 634 poids, qui remplace les deux boucles et décide à 100 Hz |
 | en commun | lecture de l'IMU, intégration de la vitesse, génération des pas, sécurités | idem |
 
@@ -98,9 +98,16 @@ Sur le robot, le nouvel agent a tenu 76 s avec 536 pas/s d'écart-type de
 commande, contre 893 pour l'ancien. **La comparaison chiffrée avec la cascade
 sur le matériel reste à faire.**
 
-La cascade PID réglée à la main avait d'abord fait passer l'erreur d'angle de
-0,293° à 0,064° (voir le [carnet](docs/carnet-du-balancier.html)). Elle n'a pas
-été écrite pour être la meilleure, mais pour apprendre l'automatique.
+Le double PID réglé à la main avait d'abord fait passer l'erreur d'angle de
+0,293° à 0,064° (voir le [carnet](docs/carnet-du-balancier.html)). Il a servi à
+mettre en pratique mes cours d'automatique, pas à obtenir le meilleur
+régulateur possible.
+
+**J'ai volontairement sauté la démarche complète d'automatique** : modéliser le
+pendule, établir sa fonction de transfert, trouver ses pôles et dimensionner un
+correcteur proprement. Les gains ont été trouvés par essais et mesures sur le
+robot, puis je suis passé directement à l'apprentissage par renforcement, qui
+était le vrai sujet du projet.
 
 ---
 
@@ -137,7 +144,7 @@ python tools\pupitre.py
 
 | | |
 |---|---|
-| **août 2026** | châssis, électronique, cascade PID réglée à la main. Démonstration qu'une commande en vitesse ne peut pas stabiliser un pendule inversé, passage à une commande en accélération. Bug dans le pilote I2C d'Espressif remonté par `addr2line`. |
+| **août 2026** | châssis, électronique, double PID réglé à la main par essais et mesures, sans modélisation complète. Un calcul rapide montre qu'une commande en vitesse ne peut pas stabiliser un pendule inversé : passage à une commande en accélération. Bug dans le pilote I2C d'Espressif remonté par `addr2line`. |
 | **5 sept** | modèle MuJoCo reconstruit depuis l'assemblage SolidWorks, firmware porté en simulation comme témoin, premier agent PPO. |
 | **9 sept** | politique exportée en C et validée contre PyTorch. Plantage de la carte résolu en isolant l'I2C dans une tâche dédiée. Identification du moteur en boucle fermée, par balayages et interspectres, sans démonter le robot : résonance à 71 Hz, pas 113. Réentraînement sur le moteur fidèle. |
 | **10 sept** | direction (deux vitesses de roue indépendantes sur un seul timer), pupitre avec joystick, vidéo. |

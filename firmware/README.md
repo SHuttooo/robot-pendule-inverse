@@ -22,7 +22,10 @@ secondes.
 
 ## Deux pilotes pour le même robot
 
-**La cascade PID**, réglée à la main (commande `1`) :
+**Le double PID** (commande `1`), réglé à la main pour mettre en pratique mes
+cours d'automatique. Les gains viennent d'essais et de mesures sur le robot,
+pas d'une modélisation du pendule avec placement de pôles : j'ai sauté cette
+étape pour passer directement à l'apprentissage par renforcement.
 
 ```
 boucle interne, 200 Hz, cadencée par l'INT du MPU-6050

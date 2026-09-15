@@ -209,9 +209,10 @@ GABARIT = """<mujoco model="balancier">
     <light pos="0.6 -0.6 1.8" dir="-0.3 0.3 -1" directional="true" diffuse="0.55 0.55 0.55"/>
     <geom name="sol" type="plane" size="5 5 0.1" material="sol"/>
 
-    <!-- Chassis : corps racine, trois libertes planes. Le robot reel ne peut
-         pas tourner (les deux STEP sont sur un seul timer), donc un modele
-         plan est fidele, pas une simplification. -->
+    <!-- Chassis : corps racine. Modele 3D par defaut : le robot reel tourne
+         depuis le 10 septembre 2026 (un accumulateur de pas par roue). Le
+         modele plan reste disponible, plus rapide, quand la direction ne
+         compte pas. -->
     <body name="chassis" pos="0 0 {rayon_roue}">
 {articulations}
 
@@ -304,18 +305,18 @@ ACTIONNEUR_COUPLE = '''  <!-- MODELE FIDELE : MuJoCo ne recoit qu un COUPLE. C e
   </actuator>'''
 
 
-PLAN = '''      <!-- Modele PLAN : 3 libertes. Le robot ne peut pas tourner, ce qui
-           est fidele au firmware actuel (les deux STEP sur un seul timer).
-           Plus rapide, et suffisant tant qu on ne commande pas de direction. -->
+PLAN = '''      <!-- Modele PLAN : 3 libertes, pas de lacet. Plus rapide, et suffisant
+           tant qu on ne commande pas de direction. Il correspondait au
+           firmware d avant le 10 septembre 2026, ou les deux STEP partageaient
+           un timer. -->
       <joint name="glissiere_x" type="slide" axis="1 0 0"/>
       <joint name="glissiere_z" type="slide" axis="0 0 1"/>
       <joint name="tangage"     type="hinge" axis="0 1 0"/>'''
 
 TROIS_D = '''      <!-- Modele 3D : articulation libre, 6 libertes. Necessaire des qu on
            veut TOURNER -- le lacet n existe tout simplement pas dans le modele
-           plan. Les deux roues deviennent commandables separement.
-           Rappel materiel : sur le vrai robot il faudra un second timer, ou un
-           timer unique plus rapide avec un accumulateur par moteur. -->
+           plan. Les deux roues deviennent commandables separement, comme sur
+           le vrai robot depuis le 10 septembre 2026. -->
       <freejoint name="libre"/>'''
 
 

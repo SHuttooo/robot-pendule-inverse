@@ -51,7 +51,7 @@ hardware/     la mécanique : CAO SolidWorks, STL, nomenclature, câblage, monta
 firmware/     le code ESP32 : double PID, politique apprise, sécurités, commandes série
 tools/        le moniteur série (journal horodaté) et le pupitre de pilotage avec joystick
 simulation/   MuJoCo, l'environnement Gymnasium, PPO, l'export C, les vidéos
-docs/         le carnet de mise au point, le journal (pièges, décisions, résultats)
+docs/         le carnet de mise au point (état au 28 août), le journal (pièges, décisions, résultats)
 donnees/      les journaux série bruts du robot, source de chaque chiffre mesuré
 ```
 

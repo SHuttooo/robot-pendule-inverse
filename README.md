@@ -55,7 +55,7 @@ hardware/     mechanics: SolidWorks CAD, STL, bill of materials, wiring, actual 
 firmware/     ESP32 code: dual PID, learned policy, safety checks, serial commands
 tools/        serial monitor (timestamped log) and control panel with joystick
 simulation/   MuJoCo, Gymnasium environment, PPO, C export, videos
-docs/         tuning notebook, project log (pitfalls, decisions, results)
+docs/         tuning notebook (as of 28 August), project log (pitfalls, decisions, results)
 donnees/      raw serial logs from the robot, source of every measured number
 ```
 

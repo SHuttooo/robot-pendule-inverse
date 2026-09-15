@@ -455,7 +455,7 @@ void politique_observation(float angle_deg, float gyro_deg_s, float sps,
   obs[1]  = gyro_deg_s / 100.0f;
   obs[2]  = 0.0f;                       /* gyro de lacet : pas lu par le firmware */
   obs[3]  = sps / 1600.0f;
-  obs[4]  = sps / 1600.0f;              /* un seul timer : les deux roues liees   */
+  obs[4]  = sps / 1600.0f;              /* roues liees, comme a l entrainement    */
   obs[5]  = pol_borne((odo - pol_x_cible) / 0.20f, -1.75f, 1.75f);
   obs[6]  = 0.0f;                       /* ecart de cap : pas d odometrie par roue */
   obs[7]  = cons_v / POL_V_MAX;
@@ -506,7 +506,7 @@ float politique_accel(float angle_deg, float gyro_deg_s, float sps,
   pol_a_prec[0]  = act[0];
   pol_a_prec[1]  = act[1];
 
-  /* un seul timer : on moyenne les deux roues */
+  /* roues liees a l entrainement : on moyenne les deux sorties */
   moy = 0.5f * (act[0] + act[1]);
 
   if (moy > POL_SAT_SEUIL || moy < -POL_SAT_SEUIL) {

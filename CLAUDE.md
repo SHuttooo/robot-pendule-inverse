@@ -107,7 +107,8 @@ régénérer `modeles/balancier.xml`. Les maillages sont lus dans
 
 **Les roues font 65 mm**, pas 90 comme le suppose le carnet. Toutes les
 conversions pas↔mm du carnet sont surévaluées d'un facteur 1,38.
-`MAX_SPS = 1600` ne donne que **0,204 m/s**.
+1 600 pas/s ne font que **0,204 m/s** (le plafond firmware est désormais
+`MAX_SPS = 3000`).
 
 **`L = 13,6 cm` du carnet n'est pas la hauteur du centre de masse** : la formule
 `g/(2πf)²` donne la longueur du pendule *ponctuel* équivalent, toujours plus
@@ -118,13 +119,16 @@ fermée, donc fonction des gains. La bonne mesure est en `MESURES.md` § 1 :
 robot suspendu par son essieu, 20 oscillations, **prédiction 16,6 s**.
 Le taux de divergence du pendule inversé vaut exactement `2π/T`.
 
-**Poussée encaissée par la cascade** : 0,80 N pendant 100 ms à 210 mm de l'axe.
-C'est la référence à battre. Réparer la carte pour monter à 2400 pas/s vaudrait
-**+49 %**.
+**Poussée encaissée, sur le moteur fidèle** (150 ms à 21 cm,
+`17_pousser_agents.py`) : double PID 0,47 N, nouvel agent 0,53 N, ancien agent
+0,38 N. L'avantage du nouvel agent ne survit pas à un enchaînement de poussées.
+Les 0,80 N du 5 septembre venaient de l'actionneur en vitesse, qui suppose la
+roue instantanée : trop optimistes.
 
 **Un pas-à-pas est un ressort magnétique**, pas une source de vitesse :
-`C = C_maintien · sin(50·(θ_cmd − θ_rotor))`. Raideur 14 N·m/rad, couple maximal
-à 1,80° d'écart (un pas entier), résonance à 113 Hz. Le modèle fidèle
+`C = C_maintien · sin(50·(θ_cmd − θ_rotor))`. Couple maximal à 1,80° d'écart
+(un pas entier). Résonance **mesurée à 71 Hz** sur le robot le 9 septembre, et
+non les 113 Hz supposés au départ (d'où la raideur de 14 N·m/rad, caduque). Le modèle fidèle
 (`moteur.py`) génère 5,45 °/s de vibration mécanique — du bon ordre que les
 1,08–3,48 °/s du carnet — là où l'actionneur `<velocity>` n'en produit aucune.
 Il divise aussi par deux la poussée encaissée.

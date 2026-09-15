@@ -21,7 +21,7 @@ Un en-tête C autonome, 39 ko de source, **aucune dépendance hors `math.h`**.
 Régénérer après tout réentraînement :
 
 ```
-python 11_export_c.py            # écrit sortie_c/politique.h
+python 11_export_c.py            # écrit firmware/robot_balancier/politique.h
 python 12_valider_c.py           # compile et compare au Python
 ```
 
@@ -59,15 +59,18 @@ sécurités I2C.
 ### Ce que l'agent n'a pas, et ce que ça coûte
 
 Ton firmware lit 8 octets depuis `0x3D` : `AY AZ TEMP GX`. Donc pas de gyro Z,
-et un seul timer donc pas d'odométrie par roue. Trois entrées sur quinze sont
-câblées à zéro. Mesuré en simulation :
+et la politique a été entraînée sans odométrie par roue. Trois entrées sur
+quinze sont câblées à zéro. Mesuré en simulation :
 
 | | survie | erreur d'angle |
 |---|---|---|
 | toutes les entrées | 100 % | 0,086° |
 | sans lacet ni cap — **ton robot** | 100 % | 0,085° |
 
-Et lier les deux roues (un seul timer) : 0,089° contre 0,088°. **Aucun coût.**
+Et lier les deux roues : 0,089° contre 0,088°. **Aucun coût.**
+
+La direction ajoutée le 10 septembre 2026 (commande `#`) s'applique **après** la
+politique, en écartant les vitesses des deux roues : l'agent ne la voit pas.
 
 ---
 

@@ -130,6 +130,6 @@ Deux conséquences :
 |---|---|
 | **Vref des A4988** | jamais réglé. Il fixe le couple disponible. Procédure : `Vref = I × 8 × Rshunt`, voir le [carnet](../docs/carnet-du-balancier.html). |
 | **ENABLE** | non câblé : les moteurs restent alimentés et chauffent même à l'arrêt. |
-| **Tension batterie** | aucune mesure. Un élément est mort sans prévenir le 9 septembre 2026. Un pont diviseur vers une entrée analogique réglerait ça. |
+| **Charge des batteries** | le robot ne la mesure pas. Des batteries déchargées dégradent l'équilibre bien avant la chute (douze fois pire le 9 septembre 2026) : les charger avant toute mesure. |
 | **USB et 5 V** | ne jamais alimenter l'ESP32 par l'USB et par le convertisseur en même temps. Garder les masses communes, débrancher le fil 5 V. |
 | **Historique** | un premier ESP32 a été détruit par du 12 V sur sa broche 3V3. Les drivers et l'IMU ont été changés, pas le convertisseur. |

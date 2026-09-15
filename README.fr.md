@@ -39,8 +39,8 @@ Le double PID sert aussi de **témoin** : en simulation (`simulation/firmware.py
 `08_agent.py --duel`) comme sur le robot, c'est lui qui dit si un mauvais
 résultat vient de l'agent ou du matériel. Le 9 septembre, lancé avant l'agent,
 il tenait douze fois moins bien que plus tôt dans la soirée : la dégradation
-venait donc du robot (très probablement la batterie, un élément était mort),
-pas du réentraînement.
+venait donc du robot (batteries déchargées : une fois rechargées, tout est
+revenu), pas du réentraînement.
 
 ---
 
@@ -149,7 +149,6 @@ python tools\pupitre.py
 
 - mesurer le double PID et l'agent sur le matériel, dans les mêmes conditions ;
 - régler le Vref des A4988, jamais mesuré ;
-- refaire le pack batterie (un élément mort) et ajouter une mesure de tension ;
 - la période du pendule suspendu, contre-épreuve du modèle ([`docs/MESURES.md`](docs/MESURES.md)).
 
 ---

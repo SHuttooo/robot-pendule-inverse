@@ -222,6 +222,11 @@ l'essai.
 **Symptômes** : une roue ne tourne plus et les moteurs sifflent à l'arrêt. Un
 élément 18650 sur quatre est mort, les trois autres sont mal chargés.
 
+> **Correction du 15 septembre 2026.** Il n'y a pas de problème de batterie :
+> elles étaient déchargées. Une fois rechargées, le robot a retrouvé son
+> comportement et le nouvel agent a volé. Les points 1 et 5 de la liste
+> « À faire » ci-dessous sont donc caducs.
+
 **La cascade a servi de témoin, et c'est ce qui a sauvé la mesure.** Lancée
 avant l'agent :
 

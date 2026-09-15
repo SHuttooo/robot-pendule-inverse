@@ -43,7 +43,8 @@ The dual PID is also the **reference**: in simulation (`simulation/firmware.py`,
 `08_agent.py --duel`) as on the robot, it tells whether a bad result comes from
 the policy or from the hardware. On 9 September, run before the policy, it
 balanced twelve times worse than earlier that evening: the problem was the
-robot (most likely the battery, one cell was dead), not the retraining.
+robot (discharged batteries: once recharged, everything worked again), not the
+retraining.
 
 ---
 
@@ -152,7 +153,6 @@ python tools\pupitre.py
 
 - measure the dual PID and the policy on the hardware, under the same conditions;
 - set the A4988 Vref, never measured;
-- rebuild the battery pack (one dead cell) and add voltage monitoring;
 - the period of the robot hanging as a pendulum, an independent check of the model ([`docs/MESURES.md`](docs/MESURES.md)).
 
 ---

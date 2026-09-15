@@ -128,6 +128,6 @@ Two consequences:
 |---|---|
 | **A4988 Vref** | never set. It sets the available torque. Procedure: `Vref = I × 8 × Rshunt`, see the [notebook](../docs/carnet-du-balancier.html) (in French). |
 | **ENABLE** | not wired: the motors stay powered and heat up even when idle. |
-| **Battery voltage** | not measured. One cell died without warning on 9 September 2026. A voltage divider to an analog input would fix this. |
+| **Battery charge** | the robot does not measure it. Discharged batteries degrade balancing long before the robot falls (twelve times worse on 9 September 2026): charge them before any measurement. |
 | **USB and 5 V** | never power the ESP32 from USB and from the converter at the same time. Keep the grounds common, disconnect the 5 V wire. |
 | **History** | a first ESP32 was destroyed by 12 V on its 3V3 pin. The drivers and the IMU were replaced, the converter was not. |

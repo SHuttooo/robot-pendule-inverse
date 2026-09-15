@@ -1,0 +1,141 @@
+<mujoco model="balancier">
+  <!-- GENERE PAR modele.py -- ne pas editer a la main.
+       Modifier les valeurs dans modele.py puis relancer : python modele.py
+
+       Reperes :  +x = avant   |   tangage > 0 = penche en avant
+                  vitesse de roue > 0 = le robot avance
+       Origine du chassis : l axe des roues.
+  -->
+  <compiler angle="degree" autolimits="true" meshdir="../../hardware/cao/stl_assemblage"/>
+  <option timestep="0.0005" integrator="implicitfast" gravity="0 0 -9.81"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.35 0.35 0.35" specular="0.1 0.1 0.1"/>
+    <global azimuth="130" elevation="-16" offwidth="1920" offheight="1440"/>
+    <quality shadowsize="4096"/>
+  </visual>
+
+  <asset>
+    <mesh name="moteur_d" file="Assemblage1 - nema17HS3401S-1.STL" scale="0.001 0.001 0.001"/>
+    <mesh name="moteur_g" file="Assemblage1 - nema17HS3401S-2.STL" scale="0.001 0.001 0.001"/>
+    <mesh name="piece1" file="Assemblage1 - piece1-1.STL" scale="0.001 0.001 0.001"/>
+    <mesh name="piece2" file="Assemblage1 - piece2-1.STL" scale="0.001 0.001 0.001"/>
+    <mesh name="piece3" file="Assemblage1 - piece3-1.STL" scale="0.001 0.001 0.001"/>
+    <mesh name="piece4" file="Assemblage1 - piece4-1.STL" scale="0.001 0.001 0.001"/>
+    <texture type="skybox" builtin="gradient" rgb1="0.26 0.31 0.36" rgb2="0.06 0.08 0.11"
+             width="512" height="512"/>
+    <texture name="damier" type="2d" builtin="checker" rgb1="0.19 0.21 0.23"
+             rgb2="0.25 0.27 0.29" width="300" height="300"/>
+    <material name="sol" texture="damier" texrepeat="14 14" reflectance="0.1"/>
+  </asset>
+
+  <default>
+    <geom friction="1.0 0.005 0.0001"/>
+    <default class="roue">
+      <geom type="cylinder" size="0.0325 0.013" zaxis="0 1 0"
+            mass="0.03" rgba="0.11 0.11 0.13 1"/>
+      <!-- armature = inertie du rotor pas-a-pas ramenee a l axe (34 g.cm2),
+           du meme ordre que celle de la roue. L oublier fausse la dynamique. -->
+      <joint type="hinge" axis="0 1 0" armature="1.2e-5" damping="2e-5"/>
+    </default>
+  </default>
+
+  <worldbody>
+    <light pos="0.6 -0.6 1.8" dir="-0.3 0.3 -1" directional="true" diffuse="0.55 0.55 0.55"/>
+    <geom name="sol" type="plane" size="5 5 0.1" material="sol"/>
+
+    <!-- Chassis : corps racine, trois libertes planes. Le robot reel ne peut
+         pas tourner (les deux STEP sont sur un seul timer), donc un modele
+         plan est fidele, pas une simplification. -->
+    <body name="chassis" pos="0 0 0.0325">
+      <!-- Modele 3D : articulation libre, 6 libertes. Necessaire des qu on
+           veut TOURNER -- le lacet n existe tout simplement pas dans le modele
+           plan. Les deux roues deviennent commandables separement.
+           Rappel materiel : sur le vrai robot il faudra un second timer, ou un
+           timer unique plus rapide avec un accumulateur par moteur. -->
+      <freejoint name="libre"/>
+
+      <!-- L ASSEMBLAGE. Ces maillages portent la masse ET la collision.
+           MuJoCo deduit l inertie de la vraie forme, mais convexifie pour le
+           contact : le robot tombe sur son enveloppe, pas sur son cadre. -->
+      <geom name="moteur_d" type="mesh" mesh="moteur_d" pos="-0.03968 0.07410 -1.02100" euler="0 0 -90"
+            mass="0.2200" rgba="0.28 0.30 0.33 1"/>
+      <geom name="moteur_g" type="mesh" mesh="moteur_g" pos="-0.03968 0.07410 -1.02100" euler="0 0 -90"
+            mass="0.2200" rgba="0.28 0.30 0.33 1"/>
+      <geom name="piece1" type="mesh" mesh="piece1" pos="-0.03968 0.07410 -1.02100" euler="0 0 -90"
+            mass="0.0410" rgba="0.60 0.63 0.66 1"/>
+      <geom name="piece2" type="mesh" mesh="piece2" pos="-0.03968 0.07410 -1.02100" euler="0 0 -90"
+            mass="0.0410" rgba="0.60 0.63 0.66 1"/>
+      <geom name="piece3" type="mesh" mesh="piece3" pos="-0.03968 0.07410 -1.02100" euler="0 0 -90"
+            mass="0.0670" rgba="0.60 0.63 0.66 1"/>
+      <geom name="piece4" type="mesh" mesh="piece4" pos="-0.03968 0.07410 -1.02100" euler="0 0 -90"
+            mass="0.0520" rgba="0.60 0.63 0.66 1"/>
+
+      <!-- ABSENTS DE LA CAO. Positions et masses a etablir. La batterie est
+           le terme dominant de l inertie : son bras de levier intervient au
+           carre. Se tromper de 3 cm dessus compte plus que tout le reste. -->
+      <geom name="bat_haut" type="box" size="0.033 0.030 0.009" pos="0 0 0.208"
+            mass="0.163" contype="0" conaffinity="0" rgba="0.85 0.45 0.15 1"/>
+      <geom name="bat_bas" type="cylinder" size="0.009 0.033" zaxis="0 1 0"
+            pos="0 0 0.182"
+            mass="0.054" contype="0" conaffinity="0" rgba="0.85 0.45 0.15 1"/>
+      <geom name="elec" type="box" size="0.028 0.030 0.009" pos="0 0 0.075"
+            mass="0.07" contype="0" conaffinity="0" rgba="0.20 0.55 0.35 1"/>
+
+      <!-- Le MPU-6050 : x devant, z en haut. Sur le vrai robot il est couche,
+           d ou angleOffset = -91,4 deg ; ici la verticale vaut 0. -->
+      <site name="mpu" pos="0 0 0.06" size="0.005" rgba="0 0.85 0.85 1"/>
+
+      <body name="corps_roue_d" pos="0  0.0691 0">
+        <joint name="roue_d" class="roue"/>
+        <geom  name="roue_d" class="roue"/>
+        <geom name="rayon_d" type="box" size="0.0279 0.0135 0.004" pos="0 0 0"
+              mass="0" rgba="0.72 0.74 0.77 1" contype="0" conaffinity="0"/>
+      </body>
+      <body name="corps_roue_g" pos="0 -0.0691 0">
+        <joint name="roue_g" class="roue"/>
+        <geom  name="roue_g" class="roue"/>
+        <geom name="rayon_g" type="box" size="0.0279 0.0135 0.004" pos="0 0 0"
+              mass="0" rgba="0.72 0.74 0.77 1" contype="0" conaffinity="0"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <!-- Freins desactives. Les activer a chaud (data.eq_active) bloque les roues :
+       distingue "pendule sur son essieu" de "robot qui bascule en bloc". -->
+  <equality>
+    <joint name="frein_d" joint1="roue_d" active="false"/>
+    <joint name="frein_g" joint1="roue_g" active="false"/>
+  </equality>
+
+  <!-- Un pas-a-pas suit sa consigne de vitesse tant qu il ne decroche pas :
+       actionneur en VITESSE plafonne en couple. Au-dela, il perd des pas.
+       ctrlrange en rad/s : 3000 pas/s = 3000*2pi/1600.0 = 11.78 rad/s -->
+  <!-- MODELE SIMPLE : le moteur suit sa consigne de vitesse tant qu il ne
+       decroche pas. Rapide, suffisant pour degrossir, mais il laisse une
+       erreur de vitesse permanente sous charge -- ce qu un vrai pas-a-pas
+       ne fait pas. Voir moteur.py.
+       ctrlrange en rad/s : 3000 pas/s = 3000*2pi/1600.0 = 11.78 rad/s -->
+  <actuator>
+    <velocity name="roue_d" joint="roue_d" kv="0.5"
+              ctrlrange="-11.78 11.78" forcerange="-0.2 0.2"/>
+    <velocity name="roue_g" joint="roue_g" kv="0.5"
+              ctrlrange="-11.78 11.78" forcerange="-0.2 0.2"/>
+  </actuator>
+
+  <!-- Les MEMES grandeurs que le vrai robot : le filtre complementaire du
+       firmware se porte tel quel. Le bruit est ajoute cote Python
+       (bruit_gyro, bruit_accel) : l attribut noise a disparu de MuJoCo 3.x. -->
+  <sensor>
+    <gyro          name="gyro"  site="mpu"/>
+    <accelerometer name="accel" site="mpu"/>
+    <jointpos      name="pos_roue_d" joint="roue_d"/>
+    <jointpos      name="pos_roue_g" joint="roue_g"/>
+    <!-- Verite terrain, pour la MESURE seulement -- jamais pour la commande
+         ni pour l observation d un agent : le vrai robot ne les a pas. Passer
+         par des capteurs plutot que par qpos rend tous les scripts
+         independants du choix plan / 3D. -->
+    <framequat name="orientation" objtype="body" objname="chassis"/>
+    <framepos  name="position"    objtype="body" objname="chassis"/>
+  </sensor>
+</mujoco>

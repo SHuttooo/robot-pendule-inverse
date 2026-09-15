@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+
+# Journal serie en direct : ecrit par tools/serial_monitor.ps1.
+# Les journaux archives sont dans donnees/, compresses.
+logs/
+tools/cmd.txt
+tools/STOP
+tools/PAUSE
+
+# Simulation : tout ce qui se regenere
+simulation/rendus/
+simulation/chutes/
+simulation/*.log
+simulation/agents/*
+!simulation/agents/balancier_final.zip
+simulation/agents_v1_vitesse/*
+!simulation/agents_v1_vitesse/balancier_9000000_pas.zip
+
+# Export C : trace locale de l agent exporte (l en-tete la porte deja)
+firmware/robot_balancier/agent_source.txt
+build/
+
+# SolidWorks : fichiers de verrouillage et temporaires
+~$*
+*.swp

@@ -1,0 +1,1296 @@
+<title>Carnet du balancier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground:   #EEF1F4;
+    --surface:  #FFFFFF;
+    --surface-2:#E4E9ED;
+    --ink:      #131C24;
+    --ink-2:    #56646F;
+    --ink-3:    #8894A0;
+    --line:     #D3DAE0;
+    --line-2:   #BFC8D0;
+    --accent:   #0E6E8C;
+    --accent-w: #0E6E8C1A;
+    --bad:      #A93226;
+    --good:     #1C7A5E;
+    --warn:     #B4530A;
+    --shadow:   0 1px 2px #131c2410, 0 8px 24px #131c240c;
+
+    --f-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --f-body:    "Source Serif 4", Georgia, "Times New Roman", serif;
+    --f-mono:    "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+    --measure: 68ch;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:   #10161C;
+      --surface:  #172029;
+      --surface-2:#1E2932;
+      --ink:      #E4EAEF;
+      --ink-2:    #9AA7B2;
+      --ink-3:    #6C7B87;
+      --line:     #2A343D;
+      --line-2:   #38444E;
+      --accent:   #4EB8D8;
+      --accent-w: #4EB8D822;
+      --bad:      #E0796C;
+      --good:     #5FC4A2;
+      --warn:     #E0A055;
+      --shadow:   0 1px 2px #0000004d, 0 8px 24px #00000038;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:   #10161C;
+    --surface:  #172029;
+    --surface-2:#1E2932;
+    --ink:      #E4EAEF;
+    --ink-2:    #9AA7B2;
+    --ink-3:    #6C7B87;
+    --line:     #2A343D;
+    --line-2:   #38444E;
+    --accent:   #4EB8D8;
+    --accent-w: #4EB8D822;
+    --bad:      #E0796C;
+    --good:     #5FC4A2;
+    --warn:     #E0A055;
+    --shadow:   0 1px 2px #0000004d, 0 8px 24px #00000038;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16.5px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  @media (min-width: 1100px) {
+    .wrap { grid-template-columns: 210px minmax(0, 1fr); gap: 56px; padding-right: 40px; }
+  }
+
+  /* ---------------------------------------------------------- sommaire */
+  nav.toc { display: none; }
+
+  @media (min-width: 1100px) {
+    nav.toc {
+      display: block;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      padding: 96px 0 40px;
+      font-family: var(--f-mono);
+      font-size: 11.5px;
+      line-height: 1.5;
+      letter-spacing: .02em;
+    }
+    nav.toc ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+    nav.toc a {
+      display: block;
+      padding: 5px 10px 5px 11px;
+      color: var(--ink-2);
+      text-decoration: none;
+      border-left: 2px solid var(--line);
+    }
+    nav.toc a:hover { color: var(--accent); border-left-color: var(--accent); background: var(--accent-w); }
+    nav.toc a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    nav.toc .toc-head {
+      color: var(--ink-3);
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      font-size: 10px;
+      padding: 0 0 12px 13px;
+      border: 0;
+    }
+  }
+
+  main { min-width: 0; max-width: 860px; }
+
+  /* ---------------------------------------------------------- en-tete */
+  header.top { padding: 88px 0 0; }
+
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 18px;
+  }
+
+  h1 {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(38px, 6vw, 58px);
+    line-height: 1.02;
+    letter-spacing: -.025em;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: var(--measure);
+    margin: 0 0 30px;
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 8px; }
+  .chip {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    padding: 4px 9px;
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    color: var(--ink-2);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  hr.rule {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 56px 0 0;
+  }
+
+  /* ---------------------------------------------------------- sections */
+  section { padding-top: 52px; }
+
+  h2 {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 27px;
+    letter-spacing: -.015em;
+    line-height: 1.2;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+
+  .sec-note {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 26px;
+  }
+
+  h3 {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -.005em;
+    margin: 34px 0 10px;
+    text-wrap: balance;
+  }
+
+  p { margin: 0 0 16px; max-width: var(--measure); }
+  main a { color: var(--accent); text-underline-offset: 2px; }
+  main a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+  strong { font-weight: 600; }
+  em.term { font-style: normal; font-family: var(--f-mono); font-size: .89em; background: var(--surface-2); padding: 1px 5px; border-radius: 2px; }
+
+  ul, ol.plain { max-width: var(--measure); margin: 0 0 16px; padding-left: 22px; }
+  li { margin-bottom: 7px; }
+
+  /* ---------------------------------------------------------- mesures */
+  .metrics {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 22px 0 26px;
+  }
+  .metric {
+    background: var(--surface);
+    padding: 13px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 14px;
+    justify-content: space-between;
+  }
+  .metric-label { font-size: 15px; color: var(--ink-2); }
+  .metric-pair {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--f-mono);
+    font-size: 13.5px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .metric-pair .before { color: var(--bad); font-weight: 500; }
+  .metric-pair .after  { color: var(--good); font-weight: 600; }
+  .metric-pair .arrow {
+    width: 26px; height: 1px; background: var(--line-2); position: relative; flex: none;
+  }
+  .metric-pair .arrow::after {
+    content: ""; position: absolute; right: 0; top: -2.5px;
+    border-left: 5px solid var(--line-2);
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+  }
+
+  /* ---------------------------------------------------------- tableaux */
+  .tw { overflow-x: auto; margin: 20px 0 26px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; min-width: 460px; }
+  th, td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+    background: var(--surface-2);
+    white-space: nowrap;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  td.num, th.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td code, th code { font-family: var(--f-mono); font-size: 13px; }
+  .cmd { font-family: var(--f-mono); font-weight: 600; color: var(--accent); white-space: nowrap; }
+
+  /* ---------------------------------------------------------- code / log */
+  pre {
+    font-family: var(--f-mono);
+    font-size: 12.8px;
+    line-height: 1.62;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 18px 0 24px;
+    color: var(--ink);
+  }
+  pre.log { border-left-color: var(--ink-3); color: var(--ink-2); }
+  pre b { color: var(--ink); font-weight: 600; }
+  pre .hl { color: var(--bad); font-weight: 600; }
+  pre .ok { color: var(--good); font-weight: 600; }
+  code { font-family: var(--f-mono); font-size: .9em; }
+
+  /* ---------------------------------------------------------- encadres */
+  .callout {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--warn);
+    background: var(--surface);
+    border-radius: 3px;
+    padding: 15px 18px;
+    margin: 22px 0 26px;
+    box-shadow: var(--shadow);
+  }
+  .callout.key { border-left-color: var(--accent); }
+  .callout h4 {
+    font-family: var(--f-display);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    margin: 0 0 7px;
+  }
+  .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+  .callout p, .callout ul { max-width: none; }
+
+  /* ---------------------------------------------------------- journal */
+  ol.journal { list-style: none; margin: 24px 0 0; padding: 0; }
+  ol.journal > li {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 18px;
+    padding-bottom: 26px;
+    margin: 0;
+  }
+  .jnum {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    padding-top: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+  .jbody h4 {
+    font-family: var(--f-display);
+    font-size: 16.5px;
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+  .jbody p { margin-bottom: 10px; }
+  .jbody pre { margin: 12px 0 4px; }
+
+  /* ---------------------------------------------------------- reste a faire */
+  ol.todo { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+  ol.todo li { background: var(--surface); padding: 15px 18px; margin: 0; display: grid; grid-template-columns: auto minmax(0,1fr); gap: 14px; align-items: start; }
+  .cost {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 2px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .cost.free { background: #1C7A5E1f; color: var(--good); }
+  .cost.part { background: #B4530A1f; color: var(--warn); }
+  .todo-t { font-family: var(--f-display); font-weight: 600; font-size: 16px; margin: 0 0 4px; }
+  .todo-d { margin: 0; color: var(--ink-2); font-size: 15px; max-width: none; }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+    line-height: 1.7;
+  }
+</style>
+
+<div class="wrap">
+
+  <nav class="toc" aria-label="Sommaire">
+    <ol>
+      <li class="toc-head">Sommaire</li>
+      <li><a href="#materiel">Matériel</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#reglage">Réglage final</a></li>
+      <li><a href="#commandes">Commandes</a></li>
+      <li><a href="#telemetrie">Télémétrie</a></li>
+      <li><a href="#diagnostics">Diagnostics</a></li>
+      <li><a href="#journal">Journal</a></li>
+      <li><a href="#reste">Ce qui reste</a></li>
+      <li><a href="#recos">Recommandations</a></li>
+      <li><a href="#outillage">Outillage</a></li>
+      <li><a href="#methode">Méthode</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <header class="top">
+      <p class="eyebrow">Robot balancier · carnet de bord</p>
+      <h1>Carnet du balancier</h1>
+      <p class="standfirst">
+        État du projet, réglages validés, signatures de diagnostic et travaux
+        restants. Tout ce qui a été mesuré au cours de la mise au point, avec
+        les chiffres qui justifient chaque choix.
+      </p>
+      <div class="chips">
+        <span class="chip">ESP32 WROOM-32D</span>
+        <span class="chip">MPU6050</span>
+        <span class="chip">2 × A4988</span>
+        <span class="chip">NEMA17 17HS3401</span>
+        <span class="chip">1/8 pas · 1600 pas/tour</span>
+        <span class="chip">Li-ion 4S · 14,8 V</span>
+      </div>
+      <hr class="rule">
+    </header>
+
+    <section id="resultat">
+      <h2>Où en est le robot</h2>
+      <p class="sec-note">Mesures avant / après, fenêtres calmes équivalentes</p>
+      <p>
+        Le robot tient debout, revient à sa position, encaisse une poussée et
+        se relève seul. Il exécute un déplacement commandé de cinq secondes
+        puis revient à son point de départ. Ce qui suit compare l’état initial
+        au réglage validé.
+      </p>
+
+      <div class="metrics">
+        <div class="metric">
+          <span class="metric-label">Erreur d’angle, écart-type</span>
+          <span class="metric-pair"><b class="before">0,293°</b><span class="arrow"></span><b class="after">0,064°</b></span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Bruit vu par le gyroscope</span>
+          <span class="metric-pair"><b class="before">3,48 °/s</b><span class="arrow"></span><b class="after">1,08 °/s</b></span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Commande moteur, écart-type</span>
+          <span class="metric-pair"><b class="before">208 pas/s</b><span class="arrow"></span><b class="after">46 pas/s</b></span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Bande de maintien en position</span>
+          <span class="metric-pair"><b class="before">26 cm de dérive</b><span class="arrow"></span><b class="after">3 mm</b></span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Échecs de lecture du capteur</span>
+          <span class="metric-pair"><b class="before">2,0 /s</b><span class="arrow"></span><b class="after">0</b></span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Plantages logiciels</span>
+          <span class="metric-pair"><b class="before">5 en 1 h</b><span class="arrow"></span><b class="after">0 en 40 min</b></span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <h4>Le seul obstacle restant est matériel</h4>
+        <p>
+          L’ESP32 meurt silencieusement quand les moteurs tournent : 180 s sans
+          la moindre interruption à l’arrêt, <strong>17 s</strong> en marche.
+          Ce plafond impose <em class="term">MAX_SPS = 1600</em> alors que les
+          moteurs suivent 2667 pas/s sans rater un pas, et
+          <em class="term">MAX_ACCEL = 25000</em> alors qu’ils encaissent
+          150 000 pas/s². Le prochain vrai gain est là, pas dans le réglage.
+        </p>
+      </div>
+    </section>
+
+    <section id="materiel">
+      <h2>Matériel et câblage</h2>
+      <p class="sec-note">Brochage et paramètres physiques</p>
+
+      <div class="tw">
+        <table>
+          <thead>
+            <tr><th>Signal</th><th class="num">GPIO</th><th>Remarque</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>DIR moteur 1</td><td class="num">5</td><td>—</td></tr>
+            <tr><td>STEP moteur 1</td><td class="num">18</td><td>appelle une résistance de rappel vers la masse</td></tr>
+            <tr><td>DIR moteur 2</td><td class="num">17</td><td>—</td></tr>
+            <tr><td>STEP moteur 2</td><td class="num">16</td><td>appelle une résistance de rappel vers la masse</td></tr>
+            <tr><td>INT du MPU6050</td><td class="num">19</td><td>cadence la boucle à 200 Hz</td></tr>
+            <tr><td>SDA</td><td class="num">21</td><td>100 kHz — 400 kHz s’est révélé inutilisable</td></tr>
+            <tr><td>SCL</td><td class="num">22</td><td>—</td></tr>
+            <tr><td>AD0 du MPU6050</td><td class="num">GND</td><td>déjà câblé, adresse 0x68</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Configuration des drivers A4988</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Broche</th><th>Connexion</th><th>Conséquence</th></tr></thead>
+          <tbody>
+            <tr><td>VDD (logique)</td><td><strong>3,3 V de l’ESP32</strong></td><td>chemin conducteur direct entre les drivers et le rail qui alimente l’ESP32 et le capteur</td></tr>
+            <tr><td>VMOT</td><td>alimentation moteurs</td><td>condensateur 100 µF présent</td></tr>
+            <tr><td>MS1, MS2, MS3</td><td>3,3 V</td><td>micropas — <strong>à vérifier</strong>, voir ci-dessous</td></tr>
+            <tr><td>RESET</td><td>ponté sur SLEEP</td><td>sort le driver de veille sans fil supplémentaire</td></tr>
+            <tr><td>ENABLE</td><td><strong>non connecté</strong></td><td>drivers actifs en permanence : les moteurs restent alimentés et chauffent même à l’arrêt</td></tr>
+            <tr><td>1A / 1B</td><td>fils Noir / Vert</td><td>bobine 1 du 17HS3401S</td></tr>
+            <tr><td>2A / 2B</td><td>fils Rouge / Bleu</td><td>bobine 2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Une bobine du moteur droit est <strong>inversée physiquement</strong> au
+        câblage, ce qui valide les drapeaux <em class="term">INVERT_M1</em> et
+        <em class="term">INVERT_M2</em> laissés à <code>false</code> dans le code.
+      </p>
+
+      <div class="callout">
+        <h4>À vérifier : 1/16 ou 1/8 de pas ?</h4>
+        <p>
+          Le câblage indique MS1, MS2 et MS3 reliés au 3,3 V, ce qui donne
+          <strong>1/16 de pas, soit 3200 pas par tour</strong>. Or le firmware
+          déclare <code>STEPS_PER_REV = 1600</code>.
+        </p>
+        <p>
+          Cette constante ne sert <strong>qu’à la commande manuelle <em class="term">V</em></strong>
+          (conversion tr/min) : la boucle d’équilibre travaille directement en
+          pas par seconde, donc <strong>tout le réglage PID reste valide</strong>.
+          En revanche, si c’est bien du 1/16, toutes les distances de ce carnet
+          sont <strong>deux fois trop grandes</strong> et le pas vaut 0,088 mm.
+          Le diamètre des roues (supposé 90 mm) n’a pas non plus été mesuré.
+        </p>
+      </div>
+
+      <h3>Grandeurs physiques établies</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Grandeur</th><th class="num">Valeur</th><th>Origine</th></tr></thead>
+          <tbody>
+            <tr><td>Résolution</td><td class="num">0,177 mm / pas <em>(?)</em></td><td>suppose 1600 pas/tour et roues 90 mm — <strong>les deux restent à confirmer</strong></td></tr>
+            <tr><td>Fréquence propre du pendule</td><td class="num">1,35 Hz</td><td>mesurée sur les passages par zéro</td></tr>
+            <tr><td>Hauteur du centre de masse</td><td class="num">≈ 13,6 cm</td><td>déduite : L = g / (2πf)²</td></tr>
+            <tr><td>Vitesse moteur vérifiée</td><td class="num">2667 pas/s</td><td>odométrie : 2637 pas/s réels pour 2667 commandés</td></tr>
+            <tr><td>Accélération vérifiée</td><td class="num">150 000 pas/s²</td><td>aucune vibration détectée, roues libres</td></tr>
+            <tr><td>Seuil statique de démarrage</td><td class="num">≈ 1° d’inclinaison</td><td>largeur du contact des pneus, ~2 mm de jeu</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <h4>Historique : un incident 12 V</h4>
+        <p>
+          Un ESP32 a été détruit en recevant du 12 V sur sa broche 3V3. Les deux
+          drivers et le MPU-6050 ont été remplacés à la suite. <strong>Le
+          convertisseur 5 V, lui, a subi l’événement sans être changé.</strong>
+          Un composant fragilisé qui fonctionne « presque » reste un candidat
+          crédible pour des pannes intermittentes.
+        </p>
+      </div>
+
+      <div class="callout">
+        <h4>Jamais vérifié : le Vref des A4988</h4>
+        <p>
+          Les potentiomètres n’ont jamais été réglés. Repérer le marquage des
+          résistances de shunt (<code>R050</code> = 0,05 Ω, <code>R100</code> = 0,1 Ω,
+          <code>R200</code> = 0,2 Ω) puis appliquer <code>Vref = I × 8 × Rshunt</code>.
+          Pour 1,3 A/phase : 0,52 V en R050, 1,04 V en R100. Mesure entre la vis
+          du potentiomètre et la masse, alimentation en marche, moteurs à l’arrêt.
+          Un courant trop faible réduit le couple de rattrapage ; trop élevé, il
+          fait chauffer les drivers et augmente le bruit rayonné.
+        </p>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <h2>L’architecture, et pourquoi</h2>
+      <p class="sec-note">La correction structurelle qui a tout débloqué</p>
+
+      <p>
+        Le code initial commandait une <strong>vitesse</strong> proportionnelle
+        à l’angle. Pour un pendule inversé, c’est l’<strong>accélération</strong>
+        du point d’appui qui redresse le corps :
+      </p>
+
+      <pre>θ̈ = (g/L)·sin θ − (a/L)·cos θ</pre>
+
+      <p>
+        En injectant <code>v = Kp·θ + Kd·θ̇</code>, l’accélération réelle vaut
+        <code>a = Kp·θ̇ + Kd·θ̈</code> : il ne reste <strong>aucun terme en θ</strong>.
+        L’équation caractéristique <code>s²(1+Kd/L) + (Kp/L)·s − g/L = 0</code> a
+        un produit de racines négatif, donc une racine réelle positive quelles
+        que soient les valeurs des gains. Cette structure ne peut pas stabiliser.
+      </p>
+
+      <p>
+        Ce qui la faisait tenir un peu, c’était la limite d’accélération de la
+        rampe moteur, qui recréait accidentellement un <code>a ∝ signe(erreur)</code>.
+        D’où le comportement « ça oscille sans jamais se poser ».
+      </p>
+
+      <h3>Structure retenue</h3>
+      <pre><b>Boucle interne — 200 Hz, cadencée par l’INT du MPU</b>
+  accel_roue  = Kp_a·err + Ki_a·∫err + Kd_a·gyro     [pas/s²]
+  vitesse_roue += accel_roue · dt        <span class="ok">← l’intégrateur EST la commande</span>
+
+<b>Boucle externe — 40 Hz</b>
+  angle_cible = angleOffset − (Kp_spd·err_vitesse + Ki_spd·err_position)
+
+<b>Auto-trim — très lent</b>
+  recale angleOffset pour annuler la correction externe résiduelle</pre>
+
+      <div class="callout key">
+        <h4>Deux conséquences à garder en tête</h4>
+        <ul>
+          <li>
+            <strong>Erreur d’angle nulle ne veut pas dire « arrête-toi ».</strong>
+            La boucle interne est un intégrateur : quand l’erreur est nulle, elle
+            conserve la vitesse qu’elle avait. Un robot parfaitement stable en
+            angle peut traverser la pièce à vitesse constante. Seule la boucle
+            externe le ramène à zéro.
+          </li>
+          <li>
+            <strong>Monter l’angle cible fait accélérer vers l’avant</strong>
+            (au transitoire près, qui est inverse). D’où
+            <em class="term">speed_sign = +1</em> et
+            <code>angle_cible = angleOffset − correction</code>.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="reglage">
+      <h2>Réglage final</h2>
+      <p class="sec-note">Enregistré en mémoire flash, survit aux redémarrages</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Cmd</th><th>Paramètre</th><th class="num">Valeur</th><th>Ce qu’il fait</th></tr></thead>
+          <tbody>
+            <tr><td class="cmd">P</td><td>Kp_a</td><td class="num">4500</td><td>angle → accélération, pas/s² par degré</td></tr>
+            <tr><td class="cmd">I</td><td>Ki_a</td><td class="num">40</td><td>intégrale d’angle</td></tr>
+            <tr><td class="cmd">D</td><td>Kd_a</td><td class="num">600</td><td>amortit le mode propre — optimum net, 450 et 750 sont pires</td></tr>
+            <tr><td class="cmd">T</td><td>Kp_spd</td><td class="num">0,002</td><td>vitesse → inclinaison, deg par pas/s</td></tr>
+            <tr><td class="cmd">Y</td><td>Ki_spd</td><td class="num">0,0008</td><td>position → inclinaison, deg par pas</td></tr>
+            <tr><td class="cmd">U</td><td>startBoost</td><td class="num">1,20°</td><td>coup de pouce au démarrage d’un déplacement</td></tr>
+            <tr><td class="cmd">E</td><td>MAX_LEAD</td><td class="num">1600 pas</td><td>avance max de la cible sur le réel</td></tr>
+            <tr><td class="cmd">L</td><td>TAU_SPEED</td><td class="num">0,400 s</td><td>coupure à 0,40 Hz, sous les 1,35 Hz du pendule</td></tr>
+            <tr><td class="cmd">M</td><td>MAX_SPS</td><td class="num">1600</td><td>bridé par la panne matérielle, pas par les moteurs</td></tr>
+            <tr><td class="cmd">R</td><td>MAX_ACCEL</td><td class="num">25 000</td><td>très prudent, marge disponible</td></tr>
+            <tr><td class="cmd">O</td><td>angleOffset</td><td class="num">≈ −91,4°</td><td>dérive avec la mécanique, l’auto-trim le recale</td></tr>
+            <tr><td class="cmd">W</td><td>durée</td><td class="num">5,0 s</td><td>durée d’un trajet, aller puis retour</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Constantes non réglables, dans le source</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Constante</th><th class="num">Valeur</th><th>Rôle</th></tr></thead>
+          <tbody>
+            <tr><td><code>TAU_COMP</code></td><td class="num">1,0 s</td><td>filtre complémentaire accéléro/gyro</td></tr>
+            <tr><td><code>TAU_GYRO</code></td><td class="num">0,012 s</td><td>lissage dédié au terme dérivé</td></tr>
+            <tr><td><code>ACCEL_DERATE</code></td><td class="num">0,60</td><td>dératage de l’accélération avec la vitesse</td></tr>
+            <tr><td><code>OUTER_FADE</code></td><td class="num">3° → 6°</td><td>effacement progressif de la boucle externe en perturbation</td></tr>
+            <tr><td><code>AUTOTRIM_RATE</code></td><td class="num">0,05 /s</td><td>trois fois plus lent que la boucle de position</td></tr>
+            <tr><td><code>SAT_MAX_MS</code></td><td class="num">1500 ms</td><td>coupure si la vitesse reste saturée</td></tr>
+            <tr><td><code>FALL_LIMIT</code></td><td class="num">30°</td><td>coupure de sécurité</td></tr>
+            <tr><td><code>ARM_LIMIT</code></td><td class="num">2°</td><td>fenêtre d’armement automatique</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout">
+        <h4>Attention en changeant Ki_spd</h4>
+        <p>
+          <em class="term">Ki_spd</em> fixe à la fois la <strong>vitesse de montée</strong>
+          de l’intégrale et son <strong>plafond</strong> (via <code>Ki_spd × MAX_LEAD</code>).
+          Le baisser ralentit le démarrage d’un déplacement autant qu’il adoucit
+          le maintien. Le coup de pouce <em class="term">U</em> compense
+          automatiquement, puisque la précharge vaut <code>startBoost / Ki_spd</code>
+          en pas — l’inclinaison obtenue ne dépend donc pas de Ki_spd.
+        </p>
+      </div>
+    </section>
+
+    <section id="commandes">
+      <h2>Commandes série</h2>
+      <p class="sec-note">115200 bauds · une lettre, éventuellement suivie d’une valeur</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Cmd</th><th>Effet</th></tr></thead>
+          <tbody>
+            <tr><td class="cmd">G</td><td>bascule le mode angle seul (le robot dérive, c’est normal)</td></tr>
+            <tr><td class="cmd">K</td><td>bascule la double boucle : angle + vitesse/position</td></tr>
+            <tr><td class="cmd">S</td><td>arrêt complet, annule aussi un armement en attente et un aller-retour</td></tr>
+            <tr><td class="cmd">Z</td><td>cale angleOffset sur l’angle courant</td></tr>
+            <tr><td class="cmd">C</td><td>relance la calibration du gyroscope</td></tr>
+            <tr><td class="cmd">V<i>rpm</i></td><td>mode manuel avec rampe, roues en l’air (dépasse MAX_SPS volontairement)</td></tr>
+            <tr><td class="cmd">B<i>val</i></td><td>accélération de la rampe du mode manuel</td></tr>
+            <tr><td class="cmd">N<i>sps</i></td><td>lance un déplacement ; avec W non nul, aller puis retour automatique</td></tr>
+            <tr><td class="cmd">W<i>sec</i></td><td>durée d’un trajet — 0 = illimité</td></tr>
+            <tr><td class="cmd">U<i>deg</i></td><td>coup de pouce au démarrage</td></tr>
+            <tr><td class="cmd">E<i>pas</i></td><td>avance max de la cible de position</td></tr>
+            <tr><td class="cmd">L<i>sec</i></td><td>constante de temps du lissage de vitesse, affiche la coupure en Hz</td></tr>
+            <tr><td class="cmd">X</td><td>inverse le signe de la boucle externe (+1 est le bon)</td></tr>
+            <tr><td class="cmd">A</td><td>bascule l’auto-trim</td></tr>
+            <tr><td class="cmd">H</td><td>bascule le ré-armement automatique après une chute</td></tr>
+            <tr><td class="cmd">J</td><td>bascule l’armement en DUAL dès le démarrage</td></tr>
+            <tr><td class="cmd">F</td><td>force la sauvegarde en flash</td></tr>
+            <tr><td class="cmd">Q</td><td>efface la mémoire, valeurs d’usine au prochain démarrage</td></tr>
+            <tr><td class="cmd">?</td><td>affiche tous les paramètres</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        L’armement automatique attend que le robot soit à <strong>moins de 2°
+        de son équilibre</strong> et <strong>immobile pendant une seconde</strong>.
+        S’il ne part pas, il dit pourquoi dans le log.
+      </p>
+    </section>
+
+    <section id="telemetrie">
+      <h2>Lire la télémétrie</h2>
+      <p class="sec-note">Une ligne toutes les 100 ms</p>
+
+      <pre class="log">P:-90.85 tgt:-90.88 e:0.06 g:0.3 DUAL sps:17 c:-0.11 off:-90.99 pos:2475 hz:200 f:0 Lus:1195 Ius:1163</pre>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Champ</th><th>Sens</th><th>Repère</th></tr></thead>
+          <tbody>
+            <tr><td class="cmd">P</td><td>angle mesuré</td><td>—</td></tr>
+            <tr><td class="cmd">tgt</td><td>angle cible = offset − correction</td><td>—</td></tr>
+            <tr><td class="cmd">e</td><td>erreur d’angle</td><td>bien réglé : écart-type ≈ 0,06°</td></tr>
+            <tr><td class="cmd">g</td><td>vitesse gyroscopique filtrée</td><td>≈ 0 au repos si le biais est bon</td></tr>
+            <tr><td class="cmd">sps</td><td>commande de vitesse roue</td><td>saturation à MAX_SPS = perte de contrôle imminente</td></tr>
+            <tr><td class="cmd">c</td><td>correction de la boucle externe, en degrés</td><td>&gt; 1° durablement = offset faux ou robot retenu</td></tr>
+            <tr><td class="cmd">off</td><td>angleOffset courant</td><td>doit être stable au repos</td></tr>
+            <tr><td class="cmd">pos</td><td>odométrie réelle, en pas</td><td>bande de quelques dizaines de pas à l’arrêt</td></tr>
+            <tr><td class="cmd">hz</td><td>fréquence de la boucle</td><td>200 attendu</td></tr>
+            <tr><td class="cmd">f</td><td>échecs I2C cumulés</td><td>doit rester à 0</td></tr>
+            <tr><td class="cmd">Lus</td><td>pire durée d’itération, µs</td><td>&lt; 3000 normal</td></tr>
+            <tr><td class="cmd">Ius</td><td>pire transaction I2C, µs</td><td>&lt; 1500 normal</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="diagnostics">
+      <h2>Signatures de diagnostic</h2>
+      <p class="sec-note">Reconnaître une panne à son empreinte</p>
+
+      <h3>Cause de redémarrage, affichée au boot</h3>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Message</th><th>Interprétation</th></tr></thead>
+          <tbody>
+            <tr><td><code>mise sous tension / EN</code></td><td>téléversement, débranchement, ou <strong>la panne matérielle</strong> — c’est la seule observée depuis le correctif</td></tr>
+            <tr><td><code>!! PLANTAGE LOGICIEL (panic)</code></td><td>bug logiciel — n’est plus apparu depuis les correctifs I2C</td></tr>
+            <tr><td><code>!! chute de tension (brownout)</code></td><td><strong>jamais vu</strong>, ce qui disculpe l’alimentation 3,3 V</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Mort silencieuse</h3>
+      <p>
+        La télémétrie s’arrête net, aucun message, COM4 reste énuméré (la puce
+        USB survit sur son propre 5 V). C’est la panne matérielle. À distinguer
+        d’un plantage logiciel, qui imprime toujours <code>Guru Meditation</code>
+        puis redémarre.
+      </p>
+
+      <h3>Calibration du gyroscope</h3>
+      <p>
+        Elle mesure le <strong>bruit</strong> autant que le biais et recommence
+        jusqu’à quatre fois. Le critère est la dispersion : un biais faux de
+        9 °/s donne une lecture éloignée de zéro mais parfaitement stable.
+      </p>
+      <pre class="log">  essai 1 : biais -9.520 deg/s, bruit 3.412
+  -&gt; robot pas assez immobile, on recommence
+  essai 2 : biais -3.447 deg/s, bruit 0.089
+gyroX_offset = -3.4470   <span class="ok">(ok)</span></pre>
+      <p>
+        Une calibration ratée rend l’angle inutilisable et <strong>empêche
+        l’armement automatique de se déclencher</strong> — le robot semble
+        alors « ne rien faire ». Un biais est affiné en continu dès que le robot
+        est désarmé et immobile.
+      </p>
+
+      <h3>Le robot ne s’arme pas</h3>
+      <pre class="log">&gt;&gt;&gt; en attente d armement : angle a 91.9 deg de l equilibre (il en faut moins de 2)
+&gt;&gt;&gt; en attente d armement : trop de mouvement, gyro 15.2 deg/s (il en faut moins de 8)
+&gt;&gt;&gt; en attente d armement : capteur muet</pre>
+      <p>
+        La calibration se fait dans <strong>n’importe quelle orientation</strong> —
+        seule l’immobilité compte. L’armement, lui, exige le robot <strong>debout</strong>.
+      </p>
+    </section>
+
+    <section id="journal">
+      <h2>Journal des problèmes résolus</h2>
+      <p class="sec-note">Dans l’ordre où ils ont été trouvés — chacun débloquait le suivant</p>
+
+      <ol class="journal">
+
+        <li>
+          <span class="jnum">01</span>
+          <div class="jbody">
+            <h4>Architecture instable par construction</h4>
+            <p>
+              Vitesse ∝ angle : pôle réel positif quels que soient les gains.
+              Remplacée par une commande en accélération intégrée.
+            </p>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">02</span>
+          <div class="jbody">
+            <h4>Le terme dérivé était piloté par le bruit</h4>
+            <p>
+              La commande sautait à ±500 pas/s avec une erreur d’angle de 0,03°.
+              Les vibrations des pas-à-pas passaient directement dans le gyro et
+              étaient amplifiées. Corrigé par un lissage dédié au terme D,
+              indépendant du filtre complémentaire.
+            </p>
+            <pre class="log">e:-0.03  sps:<span class="hl">526</span>      e:+0.37  sps:<span class="hl">-80</span>      e:+0.79  sps:<span class="hl">-230</span></pre>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">03</span>
+          <div class="jbody">
+            <h4>Trois commutations de gain simultanées à 4° d’erreur</h4>
+            <p>
+              Le facteur d’échelle, la limite d’accélération et le coefficient de
+              mélange basculaient tous au même seuil. Cycle limite garanti :
+              le robot ne pouvait pas se poser. Toutes supprimées ou remplacées
+              par des fondus progressifs.
+            </p>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">04</span>
+          <div class="jbody">
+            <h4>Un seul octet parasite bloquait la boucle une seconde entière</h4>
+            <p>
+              <code>Serial.parseFloat()</code> a un délai d’attente de 1000 ms.
+              Un caractère isolé sur la ligne de réception suffisait à figer la
+              régulation. Remplacé par un analyseur de commandes non bloquant.
+            </p>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">05</span>
+          <div class="jbody">
+            <h4>I2C : 400 kHz inutilisable, et des logs bloquants</h4>
+            <p>
+              Le pilote de l’ESP-IDF imprimait quatre lignes d’erreur en mode
+              bloquant à chaque NACK — 11,6 ms de gel mesurés. Retour à 100 kHz,
+              lecture réduite à 8 octets depuis 0x3D, logs muselés. Un échantillon
+              manqué n’interrompt plus les moteurs : l’angle est extrapolé.
+            </p>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">06</span>
+          <div class="jbody">
+            <h4>Plantage dans l’ISR du pilote I2C</h4>
+            <p>
+              <code>StoreProhibited</code>, <code>EXCVADDR 0x00000000</code>,
+              toujours au même <code>PC</code> sur trois binaires différents.
+              Résolu par <code>addr2line</code> :
+            </p>
+            <pre class="log">i2c_ll_read_rxfifo → i2c_isr_receive_handler → i2c_master_isr_handler_default</pre>
+            <p>
+              Écriture dans un tampon nul depuis l’interruption du pilote. Trois
+              mitigations : appels au pilote timer sortis des sections critiques
+              (ils étaient faits 200 fois par seconde, interruptions coupées),
+              délai I2C porté de 3 à 20 ms, reprise immédiate supprimée.
+              <strong>Zéro plantage depuis.</strong>
+            </p>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">07</span>
+          <div class="jbody">
+            <h4>Le mode propre du pendule était entretenu par la boucle externe</h4>
+            <p>
+              Oscillation mesurée à 1,35 Hz, soit la fréquence propre du robot.
+              Le lissage de vitesse coupait à 1,06 Hz — exactement dans la bande
+              à ignorer. Porté à 0,40 Hz.
+            </p>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">08</span>
+          <div class="jbody">
+            <h4>L’auto-trim effaçait la correction de position</h4>
+            <p>
+              Quand le robot s’éloignait, la boucle externe produisait une
+              correction pour le ramener — que l’auto-trim interprétait comme un
+              mauvais réglage d’équilibre et annulait en déplaçant angleOffset.
+              Le robot ne rentrait jamais. L’auto-trim ne doit absorber que la
+              dérive de vitesse, jamais l’écart de position.
+            </p>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">09</span>
+          <div class="jbody">
+            <h4>Un seuil statique de 2 mm empêchait tout déplacement</h4>
+            <p>
+              À 0,88° d’inclinaison, le décalage horizontal du centre de gravité
+              ne vaut que <code>13,6 × tan(0,88°) = 2,1 mm</code> — largement dans
+              la surface de contact des pneus. Le robot est en équilibre stable et
+              n’a aucune raison d’accélérer. Monter le gain proportionnel débloquait
+              le démarrage mais dégradait tout le reste en permanence. Résolu par
+              une <strong>précharge de l’intégrale</strong> appliquée une fois au
+              départ, qui se dissipe seule dès que le robot roule.
+            </p>
+          </div>
+        </li>
+
+        <li>
+          <span class="jnum">10</span>
+          <div class="jbody">
+            <h4>L’inversion aller → retour était brutale</h4>
+            <p>
+              Le coup de pouce était appliqué en sens inverse sur un robot encore
+              lancé à 250 pas/s : à-coups de ±750 pas/s, erreur d’angle multipliée
+              par dix. Corrigé par un marquage d’arrêt de 0,8 s entre les deux
+              trajets, et par un blocage de la précharge au-delà de 60 pas/s.
+            </p>
+          </div>
+        </li>
+
+      </ol>
+    </section>
+
+    <section id="reste">
+      <h2>Ce qui reste</h2>
+      <p class="sec-note">Par coût croissant — chaque étape est utile seule</p>
+
+      <p>
+        L’expérience contrôlée du 28 août : deux phases de 180 s, même code, même
+        carte, seule la commande moteur change.
+      </p>
+
+      <pre>moteurs à l’arrêt   <span class="ok">180 s sans une seule interruption</span>
+moteurs à 1200 pas/s  <span class="hl">mort au bout de 17 secondes</span></pre>
+
+      <p>
+        Un seul essai par condition, donc une forte présomption plutôt qu’une
+        preuve — mais l’écart est d’au moins un facteur dix. La panne est bien
+        déclenchée par le fonctionnement des moteurs, pas par le temps qui passe.
+      </p>
+
+      <div class="callout key">
+        <h4>Révision du 29 août : ce n’est pas un reset, c’est un blocage</h4>
+        <p>
+          Les vidéos de panne montrent que <strong>les roues continuent de tourner
+          à la dernière vitesse connue</strong> après la « mort ». Or si l’ISR du
+          timer continue de battre, c’est que la puce est alimentée, que son
+          horloge tourne et que les interruptions sont servies. <strong>Il n’y a
+          donc ni coupure d’alimentation, ni reset par EN, ni brownout.</strong>
+        </p>
+        <p>
+          La télémétrie s’arrête mais l’interruption survit : <code>loop()</code>
+          est bloqué. C’est un <strong>blocage de la tâche principale</strong>,
+          très probablement une attente qui ne se termine jamais dans le pilote
+          I2C après une erreur de bus.
+        </p>
+        <p>
+          Conséquence sur les données : tous les <code>POWERON_RESET</code>
+          enregistrés étaient <strong>les redémarrages manuels</strong> effectués
+          pour réveiller la carte, pas la panne elle-même. La panne ne laisse
+          aucune trace puisqu’il n’y a aucun reset — ce qui explique enfin
+          pourquoi le détecteur de sous-tension n’a jamais parlé.
+        </p>
+        <p>
+          Le lien avec les moteurs tient toujours, mais par un autre chemin :
+          bruit moteur → erreurs sur le bus I2C → branche d’erreur du pilote →
+          blocage. Cohérent avec le fait que le taux d’échec I2C dépende de la
+          position des fils.
+        </p>
+      </div>
+
+      <h3>Deux garde-fous ajoutés au firmware</h3>
+      <p>
+        Ils ne suppriment pas la cause, mais ils rendent la panne non bloquante
+        et auto-récupérable.
+      </p>
+      <ul>
+        <li>
+          <strong>Homme mort dans l’ISR moteur.</strong> L’interruption compte ses
+          propres déclenchements ; la boucle de commande remet le compteur à zéro
+          à chaque mise à jour. Au-delà du seuil, l’ISR arrête les pas d’elle-même.
+          À 1600 pas/s il y a 16 tops entre deux mises à jour, le seuil est à
+          1000 : facteur 60 de marge, ~310 ms de sécurité. Le robot s’arrête au
+          lieu de partir à la dernière vitesse connue.
+        </li>
+        <li>
+          <strong>Chien de garde matériel à 2 s.</strong> Un blocage de la boucle
+          principale provoque un redémarrage automatique. Avec
+          <em class="term">J</em> et <em class="term">H</em> actifs, le robot se
+          remet debout seul. Et la cause affichée au démarrage suivant —
+          <code>!! watchdog de tache</code> — <strong>confirmera le diagnostic</strong>.
+        </li>
+      </ul>
+
+      <ol class="todo">
+        <li>
+          <span class="cost part">4 condensateurs</span>
+          <div>
+            <p class="todo-t">Découpler le VDD de chaque driver — 100 nF + 10 µF</p>
+            <p class="todo-d">
+              Le VDD des A4988 est alimenté par
+              le 3,3 V de l’ESP32 : il existe donc un chemin <em>conducteur</em>
+              entre les drivers et le rail qui alimente le microcontrôleur et le
+              capteur. Le bruit n’a pas besoin de rayonner dans l’air, il passe
+              par le fil. Les 100 µF actuels sont sur VMOT et ne protègent que la
+              partie puissance. Poser les condensateurs au ras de chaque driver.
+              <br><br>
+              <strong>Ne pas déplacer VDD sur le 5 V :</strong> le seuil logique
+              haut de l’A4988 vaut 0,7 × VDD, soit 3,5 V — au-dessus des 3,3 V que
+              sort l’ESP32. Les signaux STEP et DIR ne seraient plus fiables.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="cost free">gratuit</span>
+          <div>
+            <p class="todo-t">Torsader les paires de fils moteurs</p>
+            <p class="todo-d">
+              Les deux fils d’une même bobine ensemble : le champ rayonné s’annule.
+              Les câbles moteurs sont les principaux émetteurs.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="cost free">gratuit</span>
+          <div>
+            <p class="todo-t">Éloigner l’ESP32 et les fils I2C des câbles moteurs</p>
+            <p class="todo-d">
+              Ne jamais les faire cheminer en parallèle ; les croiser à 90° si
+              nécessaire. Le taux d’échec I2C est passé de 0 à 1,6 /s le soir où
+              le robot a simplement été déplacé sur un support — le câblage est
+              marginal et sensible à sa position.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="cost free">gratuit</span>
+          <div>
+            <p class="todo-t">Masse dédiée et épaisse entre l’alimentation moteurs et l’ESP32</p>
+            <p class="todo-d">
+              Plutôt qu’un chaînage par la platine d’essai, qui fait passer le
+              courant moteur dans le retour de masse du capteur.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="cost part">2 résistances</span>
+          <div>
+            <p class="todo-t">10 kΩ de rappel vers la masse sur chaque broche STEP</p>
+            <p class="todo-d">
+              GPIO18 et GPIO16. Quand l’ESP32 meurt ou démarre, ses broches
+              flottent et les entrées STEP des A4988 captent du bruit : chaque
+              parasite devient une impulsion de pas. C’est ce qui fait avancer les
+              roues et produit un bruit inhabituel pendant une panne. Sans effet
+              en fonctionnement normal.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="cost part">1 résistance</span>
+          <div>
+            <p class="todo-t">4,7 kΩ entre EN et 3V3</p>
+            <p class="todo-d">
+              EN n’est tenu que par 10 kΩ — un nœud à haute impédance qui pilote
+              le reset de toute la carte. En parallèle, l’impédance tombe à 3,2 kΩ,
+              trois fois plus difficile à perturber. Le transistor de reset n’a
+              qu’1 mA à absorber, il en encaisse plus de 100. <strong>Jamais vers
+              la masse</strong>, et pas en dessous de 2,2 kΩ.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="cost part">1 condensateur</span>
+          <div>
+            <p class="todo-t">10 µF entre EN et GND</p>
+            <p class="todo-d">
+              Le remède standard aux redémarrages intempestifs en environnement
+              bruité. Une résistance ne peut pas le remplacer : il faut une réserve
+              de charge pour tenir la tension pendant le transitoire, pas une
+              dissipation. Complémentaire de la résistance ci-dessus.
+            </p>
+          </div>
+        </li>
+        <li>
+          <span class="cost part">multimètre</span>
+          <div>
+            <p class="todo-t">Régler le Vref des A4988</p>
+            <p class="todo-d">
+              Jamais fait. Conditionne le couple de rattrapage, la chaleur des
+              drivers et le bruit rayonné. Procédure dans la section Matériel.
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <h3>Une fois la carte fiable</h3>
+      <ul>
+        <li>Remonter <em class="term">MAX_SPS</em> vers 2400 — les moteurs suivent 2667 pas/s sans rater un pas, la marge de rattrapage augmente d’autant.</li>
+        <li>Remonter <em class="term">MAX_ACCEL</em> — il saturait à 99 % pendant les poussées, alors que les moteurs encaissent 150 000 pas/s² à vide.</li>
+        <li>Reprendre le réglage du déplacement : on plafonnait à 89 % de la distance demandée.</li>
+        <li>Refaire le balayage de <em class="term">Kd_a</em> sur batterie chargée — les mesures se dégradent nettement en fin d’autonomie.</li>
+      </ul>
+    </section>
+
+    <section id="recos">
+      <h2>Recommandations pour la suite</h2>
+      <p class="sec-note">Au-delà du déblocage matériel — mécanique, électronique, logiciel</p>
+
+      <h3>Mécanique</h3>
+      <ul>
+        <li>
+          <strong>Monter le centre de masse.</strong> C’est contre-intuitif mais
+          la fréquence propre vaut <code>f = √(g/L) / 2π</code> : plus la masse
+          est haute, plus le robot tombe <em>lentement</em>, et plus il est facile
+          à rattraper. Passer de 13,6 cm à 25 cm ferait descendre le mode propre
+          de 1,35 Hz à 1,0 Hz. Placer la batterie en haut du châssis, pas en bas.
+        </li>
+        <li>
+          <strong>Des roues plus grandes.</strong> Tant que <em class="term">MAX_SPS</em>
+          reste bridé par la carte, agrandir les roues est le seul moyen de gagner
+          de la vitesse linéaire — donc de la marge de rattrapage — sans toucher
+          à l’électronique.
+        </li>
+        <li>
+          <strong>Découpler le MPU-6050 du châssis</strong> avec de la mousse
+          double-face épaisse. Les pas-à-pas vibrent, l’accéléromètre prend chaque
+          vibration pour une accélération réelle.
+        </li>
+        <li>
+          <strong>Garder l’axe Y du capteur aligné</strong> sur l’axe avant-arrière
+          du robot. Un montage en biais mélange les axes et rend l’angle inexploitable.
+        </li>
+      </ul>
+
+      <h3>Électronique</h3>
+      <ul>
+        <li>
+          <strong>Câbler ENABLE des A4988 sur un GPIO.</strong> Actuellement laissé
+          en l’air, donc les drivers sont actifs en permanence : les moteurs
+          consomment leur courant nominal et chauffent <em>même à l’arrêt</em>.
+          Le piloter permettrait de couper le couple dès que le PID est désarmé —
+          moins de chaleur, moins de bruit électrique, moins de consommation.
+        </li>
+        <li>
+          <strong>Ne jamais alimenter l’ESP32 par l’USB et le convertisseur 5 V
+          en même temps.</strong> Deux sources de tensions légèrement différentes
+          se renvoient du courant ; sur une carte sans diode de protection, cela
+          peut endommager le port USB du PC. Garder les masses communes, débrancher
+          seulement le fil 5 V.
+        </li>
+        <li>
+          <strong>Régler le Vref</strong> — voir la procédure dans la section
+          Matériel. Il conditionne le couple de rattrapage, la chaleur et le bruit
+          rayonné, et n’a jamais été mesuré.
+        </li>
+      </ul>
+
+      <h3>Logiciel</h3>
+      <ul>
+        <li>
+          <strong>Passer la télémétrie en sans-fil</strong> (Wi-Fi ou ESP-NOW).
+          C’est la recommandation qui rapporterait le plus : le câble USB posé au
+          sol tire horizontalement et fausse tous les essais de déplacement — il
+          a complètement bloqué le robot pendant une demi-heure de mise au point.
+          Sans lui, on mesure enfin le vrai comportement.
+        </li>
+        <li>
+          <strong>Corriger <em class="term">STEPS_PER_REV</em></strong> à 3200 si
+          le micropas est bien en 1/16. N’affecte que la commande manuelle
+          <em class="term">V</em>, mais rend les conversions justes.
+        </li>
+        <li>
+          <strong>Compenser la dérive thermique du gyroscope.</strong> Le biais
+          mesuré a bougé de −3,44 à −5,47 °/s au cours d’une seule session.
+          L’auto-correction à l’arrêt le rattrape déjà, mais le MPU-6050 fournit
+          sa température : une correction linéaire serait plus propre.
+        </li>
+        <li>
+          <strong>Prévoir la direction (steering).</strong> Limitation actuelle à
+          connaître : les deux broches STEP sont pilotées par <em>un seul</em>
+          timer, donc les deux roues tournent forcément à la même vitesse — le
+          robot ne peut qu’aller tout droit. Pour tourner il faudra un second
+          timer, ou un timer unique plus rapide avec un accumulateur par moteur.
+        </li>
+      </ul>
+
+      <h3>Ordre de reprise conseillé</h3>
+      <ol class="plain">
+        <li>Traiter le matériel : découplage VDD, câblage, puis EN si nécessaire.</li>
+        <li>Vérifier que la carte survit 3 minutes à 1200 pas/s — c’est le test qui valide tout le reste.</li>
+        <li>Remonter <em class="term">MAX_SPS</em> vers 2400 par paliers de 200, en surveillant les redémarrages.</li>
+        <li>Remonter <em class="term">MAX_ACCEL</em> — il saturait à 99 % pendant les poussées.</li>
+        <li>Refaire le balayage de <em class="term">Kd_a</em> <strong>sur batterie chargée</strong> : les mesures se dégradent nettement en fin d’autonomie.</li>
+        <li>Reprendre le réglage du déplacement, câble suspendu ou télémétrie sans fil.</li>
+      </ol>
+
+      <div class="callout key">
+        <h4>La règle qui a fait gagner le plus de temps</h4>
+        <p>
+          Ne jamais changer deux choses à la fois, et mesurer plutôt que
+          d’observer. Chaque problème de cette session a été résolu par un
+          chiffre tiré du log — le taux d’échec I2C, la fréquence d’oscillation,
+          la vitesse réelle déduite de l’odométrie, la durée de survie avec et
+          sans moteurs. Aucun ne l’a été à l’œil.
+        </p>
+      </div>
+    </section>
+
+    <section id="outillage">
+      <h2>Outillage</h2>
+      <p class="sec-note">Moniteur série autonome, dans le dossier du projet</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Chemin</th><th>Rôle</th></tr></thead>
+          <tbody>
+            <tr><td><code>tools/serial_monitor.ps1</code></td><td>détecte le port, horodate et enregistre, se reconnecte seul</td></tr>
+            <tr><td><code>logs/robot.log</code></td><td>tout le port série, horodaté à la milliseconde</td></tr>
+            <tr><td><code>tools/cmd.txt</code></td><td>une commande écrite ici est envoyée puis le fichier est effacé</td></tr>
+            <tr><td><code>tools/PAUSE</code></td><td>si ce fichier existe, le port est libéré</td></tr>
+            <tr><td><code>tools/STOP</code></td><td>arrête le moniteur</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Il libère le port automatiquement dès qu’<code>esptool</code> tourne, donc
+        les téléversements passent sans intervention. <strong>Le moniteur série de
+        l’IDE Arduino doit rester fermé</strong> : Windows verrouille le port en
+        exclusif, on ne peut pas être deux dessus.
+      </p>
+
+      <div class="callout">
+        <h4>Deux pièges rencontrés</h4>
+        <ul>
+          <li>Une commande laissée dans <code>cmd.txt</code> pendant un téléversement part au redémarrage suivant — vider le fichier avant de flasher.</li>
+          <li>Téléverser coupe l’ESP32 huit secondes : <strong>toujours poser le robot avant</strong>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="methode">
+      <h2>Méthode de mesure</h2>
+      <p class="sec-note">Pour reproduire les chiffres de ce carnet</p>
+
+      <p>
+        Toutes les valeurs viennent du log, jamais du ressenti. Les grandeurs
+        calculées sur une fenêtre de 200 à 300 échantillons, soit 20 à 30 s :
+      </p>
+      <ul>
+        <li><strong>Erreur d’angle</strong> — écart-type et maximum du champ <code>e</code>. Fenêtre calme obligatoire : une seule chute fausse tout.</li>
+        <li><strong>Fréquence d’oscillation</strong> — comptage des changements de signe de <code>e</code>, divisé par deux fois la durée.</li>
+        <li><strong>Bande de position</strong> — amplitude de <code>pos</code>, convertie à 0,0177 cm par pas.</li>
+        <li><strong>Vitesse réelle</strong> — dérivée de <code>pos</code>. C’est la seule mesure qui distingue un moteur qui suit d’un moteur qui décroche.</li>
+        <li><strong>Décrochage moteur</strong> — écart-type du gyroscope pendant une rampe, roues en l’air : un moteur qui décroche fait vibrer tout le châssis.</li>
+        <li><strong>Taux d’échec I2C</strong> — différence du champ <code>f</code> divisée par la durée.</li>
+      </ul>
+
+      <div class="callout key">
+        <h4>Deux conditions qui faussent tout</h4>
+        <ul>
+          <li>
+            <strong>Le câble USB.</strong> Posé au sol il tire horizontalement et
+            décale le point d’équilibre. Un robot penché de 0,86° et immobile
+            lutte contre 1,5 % de son poids. Le suspendre au-dessus, ou tester
+            sur batterie.
+          </li>
+          <li>
+            <strong>L’état de la batterie.</strong> Les mesures se dégradent
+            nettement en fin d’autonomie — inutile de régler sur une cible
+            mouvante.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      Carnet du balancier · session du 28 août 2026<br>
+      Croquis : <code>robot_balancier/robot_balancier.ino</code> — 995 lignes<br>
+      Core ESP32 Arduino 3.x · le code reste compatible 2.x via les macros TIMER_*
+    </footer>
+
+  </main>
+</div>
